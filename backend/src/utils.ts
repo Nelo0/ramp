@@ -1,6 +1,6 @@
-import { Cluster, Keypair } from "@solana/web3.js";
+import { Cluster } from "@solana/web3.js";
 import * as dotenv from "dotenv"
-import { mockStableOfframpATA } from "./mockOfframp.js";
+import { offrampDepositATA } from "./mockOfframp.js";
 import * as fs from 'fs/promises';
 
 dotenv.config();
@@ -99,7 +99,7 @@ export const checkTransaction = async (txId: string, tokenAmount: number) => {
 
     const offrampTransactionResult = offrampTransactionResponse.result;
     const accountKeys = offrampTransactionResult.transaction.message.accountKeys;
-    const indexOfStablecoinMintAddress = accountKeys.indexOf(mockStableOfframpATA.toBase58())
+    const indexOfStablecoinMintAddress = accountKeys.indexOf(offrampDepositATA.toBase58())
     const preTokenBalances = offrampTransactionResult.meta.preTokenBalances;
     const postTokenBalances = offrampTransactionResult.meta.postTokenBalances;
 

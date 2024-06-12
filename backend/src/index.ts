@@ -3,12 +3,14 @@ import { sendAndConfirmTransaction } from "@solana/web3.js";
 import { ENV, SOLANA_RPC_ENDPOINT, SOLANA_WS_ENDPOINT, addStringToJson, checkTransaction, getSignaturesForAddress, getTransaction, filterProcessedSignatures } from "./utils.js";
 import { connection, quartzKeypair } from "./mockOfframp.js";
 import { getMockOfframpTx } from "./mockOfframp.js";
+import { getSwapIntructions } from "./swap.js";
 
 // Create a WebSocket connection
 const QUARTZ_USER_LIST = ["AmQmMCAZ1kMvBhvfCpdhD7y91Y99uQAWrrztEPdSsTZJ"]
 
 export const openHeliusWs = () => {
     const heliusSocket = new WebSocket(SOLANA_WS_ENDPOINT);
+    const senderAddress = quartzKeypair.publicKey.toBase58()
 
     heliusSocket.onopen = () => {
         console.log('WebSocket is open');
@@ -38,7 +40,7 @@ export const openHeliusWs = () => {
 
         }
         //get txIDs for past trasnactions
-        const prevTransactionData = await getSignaturesForAddress("6sv5cX4U38aNs5KujEqTyNqDct5DmjAoZKZA4JN6fEJV", SOLANA_RPC_ENDPOINT);
+        const prevTransactionData = await getSignaturesForAddress(senderAddress, SOLANA_RPC_ENDPOINT);
         const signatureObjects = prevTransactionData.result;
 
         //filter out the signatures that are already processed
@@ -62,7 +64,7 @@ export const openHeliusWs = () => {
                 //console.log("Sender of transaction: ", signature, " is not a Quartz user, sending deposit amount back")
 
                 //else , probablly a transaction sent by Quartz
-                if (accountKeys[0] == "6sv5cX4U38aNs5KujEqTyNqDct5DmjAoZKZA4JN6fEJV") {
+                if (accountKeys[0] == senderAddress) {
                     console.log("Quartz sent this transaction, dont process it more")
                 } else {
                     //if not sent by quartz
@@ -89,8 +91,8 @@ export const openHeliusWs = () => {
                 offrampSolTransaction = getMockOfframpTx(depositAmount);
                 tokenUiAmount = 1
             } else {
-                //TODO get real swap instructions
-                //get the quote amount and store it in tokenUiAmount
+                offrampSolTransaction = getSwapIntructions(depositAmount);
+                //TODO get the quote amount and store it in tokenUiAmount
                 tokenUiAmount = 1
             }
 
