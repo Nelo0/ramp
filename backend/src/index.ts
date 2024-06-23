@@ -1,17 +1,16 @@
 import WebSocket from "ws";
-import { sendAndConfirmTransaction } from "@solana/web3.js";
-import { ENV, SOLANA_RPC_ENDPOINT, SOLANA_WS_ENDPOINT, addStringToJson, checkTransaction, getSignaturesForAddress, getTransaction, filterProcessedSignatures } from "./utils.js";
-import { connection, quartzKeypair } from "./mockOfframp.js";
-import { getMockOfframpTx } from "./mockOfframp.js";
-import { getSwapIntructions } from "./swap.js";
+import { getSignaturesForAddress, getTransaction } from "./utils/utils.js";
+import { TransactionInfo, getSwapIntructions as getSwapTransactionInfo } from "./offramp/swap.js";
+import { ENV, QUARTZ_USER_LIST, SOLANA_RPC_ENDPOINT, SOLANA_WS_ENDPOINT, quartzKeypair } from "./utils/enviroment.js";
+import { addStringToJson, filterProcessedSignatures } from "./utils/processing.js";
+import { sendTransactionLogic } from "./utils/transactionSender.js";
 
 // Create a WebSocket connection
-const QUARTZ_USER_LIST = ["AmQmMCAZ1kMvBhvfCpdhD7y91Y99uQAWrrztEPdSsTZJ"]
-
 export const openHeliusWs = () => {
     const heliusSocket = new WebSocket(SOLANA_WS_ENDPOINT);
-    const senderAddress = quartzKeypair.publicKey.toBase58()
+    const quartzDepositAddress = quartzKeypair.publicKey.toBase58()
 
+    console.log("Quartz Deposit Address:", quartzDepositAddress)
     heliusSocket.onopen = () => {
         console.log('WebSocket is open');
         const request = {
@@ -19,7 +18,7 @@ export const openHeliusWs = () => {
             "id": 1,
             "method": "accountSubscribe",
             "params": [
-                "6sv5cX4U38aNs5KujEqTyNqDct5DmjAoZKZA4JN6fEJV",
+                `${quartzDepositAddress}`,
                 {
                     "encoding": "jsonParsed",
                     "commitment": "finalized"
@@ -40,7 +39,7 @@ export const openHeliusWs = () => {
 
         }
         //get txIDs for past trasnactions
-        const prevTransactionData = await getSignaturesForAddress(senderAddress, SOLANA_RPC_ENDPOINT);
+        const prevTransactionData = await getSignaturesForAddress(quartzDepositAddress, SOLANA_RPC_ENDPOINT);
         const signatureObjects = prevTransactionData.result;
 
         //filter out the signatures that are already processed
@@ -49,7 +48,7 @@ export const openHeliusWs = () => {
         if (signatures == undefined) {
             return;
         }
-        console.log("Signatures to process: ", signatures);
+        console.log("New signatures to process: ", signatures);
 
         for (const signature of signatures) {
             const response = await getTransaction(signature, SOLANA_RPC_ENDPOINT);
@@ -62,18 +61,16 @@ export const openHeliusWs = () => {
                 //Check if the transaction ends up with the Quartz balance increasing.
                 //TODO if yes -> return funds to user minus amount needed for sending the trasnaction
                 //console.log("Sender of transaction: ", signature, " is not a Quartz user, sending deposit amount back")
-
                 //else , probablly a transaction sent by Quartz
-                if (accountKeys[0] == senderAddress) {
+                if (accountKeys[0] == quartzDepositAddress) {
                     console.log("Quartz sent this transaction, dont process it more")
                 } else {
                     //if not sent by quartz
-                    console.log("Quartz did not send this transaction")
+                    console.log("Neither Quartz or a Quartz user did not send this transaction")
                 }
                 await addStringToJson(signature);
                 continue
             }
-            console.log("TxID", signature + " accountKeys: ", transaction.transaction.message.accountKeys);
 
             //get the deposit amount;
             const quartzPreBalance = transaction.meta.preBalances[1]
@@ -81,50 +78,38 @@ export const openHeliusWs = () => {
             const depositAmount = quartzPostBalance - quartzPreBalance
 
             if (depositAmount <= 0) {
-                console.log("Transaction: ", signature, "processed")
+                //No amount deposited, store tx as processed
                 await addStringToJson(signature);
             }
 
-            let offrampSolTransaction: any;
-            let tokenUiAmount;
+            let transactionInfo: TransactionInfo;
             if (ENV === "devnet") {
-                offrampSolTransaction = getMockOfframpTx(depositAmount);
-                tokenUiAmount = 1
+                //TODO change so that it returns instructions instread of transactions
+                //transactionInfo = getMockOfframpTx(depositAmount);
+                transactionInfo = await getSwapTransactionInfo(depositAmount);
             } else {
-                offrampSolTransaction = getSwapIntructions(depositAmount);
-                //TODO get the quote amount and store it in tokenUiAmount
-                tokenUiAmount = 1
+                transactionInfo = await getSwapTransactionInfo(depositAmount);
             }
-
-            //check if the transaction was successful (swapping the correct amount and sending it to the stablecoin offramp address)
-            //Addresses are sent the right amount of tokens
-            //Store the transaction signature in a database (file for now)
+            const offrampTransaction = transactionInfo.transaction
+            offrampTransaction.sign([quartzKeypair])
             console.log("sending Offramp transaction")
             let txId;
             try {
-                txId = await sendAndConfirmTransaction(connection, offrampSolTransaction, [quartzKeypair]);
+                txId = await sendTransactionLogic(offrampTransaction)
             } catch (error) {
                 console.log("Send offramp transaction error: ", error);
             }
-            if (txId == undefined) {
-                console.log("Offramp txId is undefined")
-                //@ts-ignore
-                console.log("Offramp Send transaction error logs: ", await error!.getLogs());
+            if (txId == "") {
+                console.log("Transaction failed")
                 continue;
             }
-            console.log("offramp transaction signature: ", txId);
-
-            console.log("Checking the status of the offramp transaction...")
-            let offrampSuccess = await checkTransaction(txId, tokenUiAmount);
-            console.log("offramp sucesss: ", offrampSuccess)
-
-            if (!offrampSuccess) {
-                console.log("Transaction did not deposit the expected amount, not storing in database")
+            if (txId == undefined || txId == null) {
                 //Dont store to database, this means that next time the server runs it will retry the offramp transaction since it will think that its a new unprocessed trasnaction 
+                console.log("Transaction did not get accepted to the blockchain, not storing signature to database")
                 continue;
             }
 
-            console.log("Offramp transaction success, adding txId for deposit and offramp to processed transactions storage")
+            console.log("Offramp transaction SUCCESS!, adding txId for deposit and offramp to processed transactions to database")
             //add txId to json file
             await addStringToJson(signature);
             await addStringToJson(txId);
@@ -141,8 +126,5 @@ export const openHeliusWs = () => {
 
     return heliusSocket
 }
-
-
-//console.log("Keypair public : ", keypair.publicKey.toBase58())
 
 let socket = openHeliusWs();

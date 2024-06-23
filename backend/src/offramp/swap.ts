@@ -1,23 +1,34 @@
-import { AddressLookupTableAccount, Keypair, PublicKey, TransactionInstruction, TransactionMessage, VersionedTransaction } from '@solana/web3.js';
-import { Wallet } from '@project-serum/anchor';
-import bs58 from 'bs58';
-import { connection, offrampDepositATA, quartzKeypair, quartzStableATA, stableTokenMint } from './mockOfframp.js';
-import { createTransferCheckedInstruction } from '@solana/spl-token';
+import { AddressLookupTableAccount, PublicKey, TransactionInstruction, TransactionMessage, VersionedTransaction } from '@solana/web3.js';
+import { ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, createTransferCheckedInstruction, getAssociatedTokenAddressSync } from '@solana/spl-token';
+import { connection, quartzKeypair, quartzStableATA, stableTokenMint } from '../utils/enviroment.js';
+import { convertDecimalPlaces } from '../utils/utils.js';
+import { initiateEuroeBurn } from './euroe.js';
 
-// It is recommended that you use your own RPC endpoint.
-// This RPC endpoint is only for demonstration purposes so that this example will run.
+export type TransactionInfo = {
+  transaction: VersionedTransaction,
+  computeUnits: number | undefined | null,
+  worstOutput: number,
+  bestOutput: number
+}
+
 export const getSwapIntructions = async (amount: number) => {
-  const wallet = new Wallet(Keypair.fromSecretKey(bs58.decode(process.env.PRIVATE_KEY || '')));
+  console.log("Deposit amount: ", amount);
 
-  // Swapping SOL to USDC with input 0.1 SOL and 0.5% slippage
   const quoteResponse = await (
-    await fetch(`https://quote-api.jup.ag/v6/quote?inputMint=So11111111111111111111111111111111111111112\
-    &outputMint=2VhjJ9WxaGC3EZFwJG9BDUs9KxKCAjQY4vgd1qxgYWVg\
-    &amount=${amount}\
-    &slippageBps=20`
-    )
+    await fetch(`https://quote-api.jup.ag/v6/quote?inputMint=So11111111111111111111111111111111111111112&outputMint=2VhjJ9WxaGC3EZFwJG9BDUs9KxKCAjQY4vgd1qxgYWVg&amount=${amount}&slippageBps=20`)
   ).json();
-  // console.log({ quoteResponse })
+
+  const expectedOutputAmount = Number(quoteResponse.outAmount);
+  const worstCaseOutput = Number(quoteResponse.otherAmountThreshold);
+  console.log("expectedOutputAmount",  expectedOutputAmount)
+  console.log("worstCaseOutput",  worstCaseOutput)
+
+  const euroeOfframpAmount = convertDecimalPlaces(worstCaseOutput, 6, 18)
+  console.log("euroeOfframpAmount",  euroeOfframpAmount)
+
+  const euroeDepositAddress = await initiateEuroeBurn(euroeOfframpAmount)
+  const euroeATA = getAssociatedTokenAddressSync(stableTokenMint, new PublicKey(euroeDepositAddress), undefined, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID);
+  //TODO: IF euroeATA is not initialized, initialize the ATA
 
   //TODO: IN the future we could use the MAX accounts property to ensure that the wrapping, swap and send instructions all fit in one transaction.
   const instructions = await (
@@ -27,9 +38,9 @@ export const getSwapIntructions = async (amount: number) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        // quoteResponse from /quote api
         quoteResponse,
         userPublicKey: quartzKeypair.publicKey.toBase58(),
+        prioritizationFeeLamports: 1_000_000
       })
     })
   ).json();
@@ -59,18 +70,16 @@ export const getSwapIntructions = async (amount: number) => {
   const sendToOfframpInstruction = createTransferCheckedInstruction(
     quartzStableATA, // from (should be a token account)
     stableTokenMint, // mint
-    offrampDepositATA, // to  - euroe address
+    euroeATA, // to  - euroe address
     quartzKeypair.publicKey, // from owner
-    1e6, // amount, if your deciamls is 8, send 10^8 for 1 token
+    worstCaseOutput, // amount, if your deciamls is 8, send 10^8 for 1 token
     6 // decimals
   );
 
-  const swapInstructionsArray = [
-    // uncomment if needed: ...setupInstructions.map(deserializeInstruction),
-    setupInstructions.map(deserializeInstruction),
+  const swapInstructionsArray = [    
+    ...setupInstructions.map(deserializeInstruction),
     deserializeInstruction(swapInstructionPayload),
     sendToOfframpInstruction,
-    //uncomment if needed: deserializeInstruction(cleanupInstruction),
   ]
 
   const messageV0 = new TransactionMessage({
@@ -79,8 +88,15 @@ export const getSwapIntructions = async (amount: number) => {
     instructions: swapInstructionsArray,
   }).compileToV0Message(addressLookupTableAccounts);
   const transaction = new VersionedTransaction(messageV0);
+  
+  const info: TransactionInfo = {
+    transaction: transaction,
+    computeUnits: null,
+    worstOutput: worstCaseOutput,
+    bestOutput: expectedOutputAmount
+  }
 
-  return transaction;
+  return info;
 }
 
 const getAddressLookupTableAccounts = async (

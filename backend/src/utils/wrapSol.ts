@@ -1,7 +1,6 @@
 import { NATIVE_MINT, createAssociatedTokenAccountInstruction, getAssociatedTokenAddress, createSyncNativeInstruction, getAccount } from "@solana/spl-token";
 import { Connection, LAMPORTS_PER_SOL, SystemProgram, Transaction, sendAndConfirmTransaction, PublicKey } from "@solana/web3.js";
-import { SOLANA_RPC_ENDPOINT } from "./utils.js";
-import { quartzKeypair } from "./mockOfframp.js";
+import { SOLANA_RPC_ENDPOINT, quartzKeypair } from "./enviroment.js";
 
 const connection = new Connection(SOLANA_RPC_ENDPOINT, 'confirmed');
 
@@ -33,7 +32,6 @@ const wrapSol = async (lamports: number) => {
             )
         );
 
-    console.log("ATA transaction: ", ataTransaction);
     await sendAndConfirmTransaction(connection, ataTransaction, [quartzKeypair]);
 
     // Transfer SOL to associated token account and use SyncNative to update wrapped SOL balance
@@ -60,9 +58,3 @@ const getAccountData = async (associatedTokenAccount: PublicKey) => {
 
     console.log(`Native: ${accountInfo.isNative}, Lamports: ${accountInfo.amount}`);
 }
-
-// const main = async () => {
-//     //await getAirdrop()
-//     let ata = await wrapSol(1)
-//     await getAccountData(ata)
-// }

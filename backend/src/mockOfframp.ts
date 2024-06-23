@@ -1,27 +1,6 @@
-import { Connection, Keypair, PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
-import { NATIVE_MINT, createAssociatedTokenAccount, createMint, createMintToCheckedInstruction, createSyncNativeInstruction, createTransferCheckedInstruction } from '@solana/spl-token'
-import * as dotenv from "dotenv"
-
-dotenv.config();
-
-const HELIUS_APIKEY = process.env.HELIUS_APIKEY;
-
-//export const connection = new Connection(SOLANA_RPC_ENDPOINT, 'confirmed');
-export const connection = new Connection(`https://devnet.helius-rpc.com/?api-key=${HELIUS_APIKEY}`, 'confirmed')
-export const stableTokenMint = new PublicKey("EZ27nebW1LDgxugqdNJJGdubteUzbzWAztjiXxdF3G9D")
-export const quartzStableATA = new PublicKey("8ovGPwc86ESG6wJ3EdPGDmT2tabzs3Ksf8xB2Dxf6ZSn")
-
-//6sv5cX4U38aNs5KujEqTyNqDct5DmjAoZKZA4JN6fEJV
-export const quartzKeypair = Keypair.fromSecretKey(
-    Uint8Array.from([
-        16, 206, 195, 248, 10, 110, 149, 249, 112, 47, 45,
-        252, 238, 186, 86, 147, 171, 70, 247, 57, 193, 206,
-        246, 214, 126, 93, 206, 201, 47, 50, 246, 155, 87,
-        85, 126, 7, 2, 223, 25, 130, 169, 233, 204, 127,
-        11, 153, 29, 243, 214, 148, 143, 3, 240, 48, 75,
-        191, 67, 134, 186, 80, 48, 172, 146, 234
-    ])
-);
+import { Keypair, PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
+import { NATIVE_MINT, createMintToCheckedInstruction, createSyncNativeInstruction, createTransferCheckedInstruction } from '@solana/spl-token'
+import { offrampDepositATA, quartzKeypair, quartzStableATA, quartzWSolATA, stableTokenMint } from './utils/enviroment.js';
 
 //Owner of the mock offrampDepositATA
 //HnQWqxiMy83iw8iMgX5JQD9WwTaA8wa62Zyt9x1vuaeE
@@ -36,42 +15,9 @@ const mockStableOfframpKeypair = Keypair.fromSecretKey(
     ])
 );
 
-export const offrampDepositATA = new PublicKey("HCqCFZQNhRnxJAvtGscFKXM6hxoiRvPhPpivGNUq2heP")
-
-//create mint 
-const createTokenMint = async (wallet: Keypair) => {
-    let mintPubkey = await createMint(
-        connection, // conneciton
-        wallet, // fee payer
-        wallet.publicKey, // mint authority
-        wallet.publicKey, // freeze authority (you can use `null` to disable it. when you disable it, you can't turn it on again)
-        6 // decimals
-    );
-
-    return mintPubkey;
-}
-
-//create ata for an address
-const createMintATAForWallet = async (address: PublicKey) => {
-
-    let ata = await createAssociatedTokenAccount(
-        connection, // connection
-        quartzKeypair, // fee payer
-        stableTokenMint, // for token mint
-        //NATIVE_MINT, //For wrapped sol
-        address // owner of the ATA
-    );
-
-    console.log("ata:", ata.toBase58())
-
-    return ata;
-}
-
 export const getMockOfframpTx = (depositAmount: number) => {
 
     //wrap SOL into wSOL
-    const quartzWSolATA = new PublicKey("H2K7SVi9Z5n7kPZKrtLBsfjRxx5fKtgVWFTWu1hE5LjH");
-
     const offrampSolTransaction = new Transaction()
         .add(
             SystemProgram.transfer({
@@ -83,20 +29,19 @@ export const getMockOfframpTx = (depositAmount: number) => {
                 quartzWSolATA
             )
         )
-    //Swap deposit amount into EUROe on Jupiter  (When testing just mock the swap)
 
     //MOCK SWAP -> SEND LAMPORTS TO OTHER ADDRESS
     offrampSolTransaction.add(
         createTransferCheckedInstruction(
             quartzWSolATA, // from (should be a token account)
             NATIVE_MINT, // mint
-            new PublicKey("GgKBSo1GcaD4kE7dMtWWQ4bq5RQe16PyB6gPBEazoLJ9"), // ata to a "random wallet" (its actually my wallet)
+            new PublicKey("GgKBSo1GcaD4kE7dMtWWQ4bq5RQe16PyB6gPBEazoLJ9"), // ata to a "random wallet" (its actually my devnet wallet)
             quartzKeypair.publicKey, // from's owner
             depositAmount, // amount, if your deciamls is 8, send 10^8 for 1 token
             9 // decimals
         )
     )
-    //MOCK SWAP -> MINT TOKENS TO ATA
+
     offrampSolTransaction.add(
         //for mock -> send lamports to random address, mint tokens to quartz ata.
         createMintToCheckedInstruction(
@@ -118,6 +63,7 @@ export const getMockOfframpTx = (depositAmount: number) => {
             6 // decimals
         )
     )
+    //TODO make this return a Transaction info object with a versioned transaction    
 
     return offrampSolTransaction;
 }
