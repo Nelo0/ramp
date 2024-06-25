@@ -1,9 +1,11 @@
 import WebSocket from "ws";
-import { getSignaturesForAddress, getTransaction } from "./utils/utils.js";
+import { getBalanceChange, getSignaturesForAddress, getTransaction } from "./utils/utils.js";
 import { TransactionInfo, getSwapIntructions as getSwapTransactionInfo } from "./offramp/swap.js";
 import { ENV, QUARTZ_USER_LIST, SOLANA_RPC_ENDPOINT, SOLANA_WS_ENDPOINT, quartzKeypair } from "./utils/enviroment.js";
 import { addStringToJson, filterProcessedSignatures } from "./utils/processing.js";
 import { sendTransactionLogic } from "./utils/transactionSender.js";
+import { returnFunds } from "./offramp/returnFunds.js";
+import { PublicKey } from "@solana/web3.js";
 
 // Create a WebSocket connection
 export const openHeliusWs = () => {
@@ -30,14 +32,8 @@ export const openHeliusWs = () => {
 
     heliusSocket.onmessage = async ({ data }: any) => {
         const messageStr = data.toString('utf8');
-        try {
-            const messageObj = JSON.parse(messageStr);
-            console.log("Detected a new transaction: ")
-        }
-        catch (error) {
-            console.error('Failed to parse JSON:', error);
+        console.log("Detected a new transaction")
 
-        }
         //get txIDs for past trasnactions
         const prevTransactionData = await getSignaturesForAddress(quartzDepositAddress, SOLANA_RPC_ENDPOINT);
         const signatureObjects = prevTransactionData.result;
@@ -54,32 +50,32 @@ export const openHeliusWs = () => {
             const response = await getTransaction(signature, SOLANA_RPC_ENDPOINT);
             const transaction = response.result;
 
-            const accountKeys = transaction.transaction.message.accountKeys;
-
-            //check if the depositor is NOT a quartz user;
-            if (!QUARTZ_USER_LIST.includes(accountKeys[0])) {
-                //Check if the transaction ends up with the Quartz balance increasing.
-                //TODO if yes -> return funds to user minus amount needed for sending the trasnaction
-                //console.log("Sender of transaction: ", signature, " is not a Quartz user, sending deposit amount back")
-                //else , probablly a transaction sent by Quartz
-                if (accountKeys[0] == quartzDepositAddress) {
-                    console.log("Quartz sent this transaction, dont process it more")
-                } else {
-                    //if not sent by quartz
-                    console.log("Neither Quartz or a Quartz user did not send this transaction")
-                }
+            const depositAmount = getBalanceChange(transaction);
+            if (depositAmount <= 0) {
+                //No amount deposited or users deposit transaction failed, store tx as processed
                 await addStringToJson(signature);
                 continue
             }
 
-            //get the deposit amount;
-            const quartzPreBalance = transaction.meta.preBalances[1]
-            const quartzPostBalance = transaction.meta.postBalances[1]
-            const depositAmount = quartzPostBalance - quartzPreBalance
+            const accountKeys = transaction.transaction.message.accountKeys;
+            const userAddress = accountKeys[0]
 
-            if (depositAmount <= 0) {
-                //No amount deposited, store tx as processed
-                await addStringToJson(signature);
+            //check if the depositor is NOT a quartz user;
+            if (!QUARTZ_USER_LIST.includes(userAddress)) {
+                if (userAddress == quartzDepositAddress) {
+                    console.log("Quartz sent this transaction, dont process it more")
+                    await addStringToJson(signature);
+                } else {
+                    //if not sent by quartz
+                    console.log("Neither Quartz or a Quartz user sent this transaction, sending funds back to sender")
+                    const result = await returnFunds(new PublicKey(userAddress), depositAmount, false)
+                    if (!result) {
+                        console.log(`Failed to return ${depositAmount} to sender ${userAddress}`)
+                    } else {
+                        await addStringToJson(signature);
+                    }
+                }
+                continue
             }
 
             let transactionInfo: TransactionInfo;

@@ -114,3 +114,22 @@ export const createATAForAddress = async (tokenMint: PublicKey, address: PublicK
 
     return instruction;
 }
+
+export const getBalanceChange = (transactionResponse: any) => {
+    const status = transactionResponse.meta.status
+    if ('Error' in status) {
+        console.log("Transaction failed")
+        return 0
+    }
+    //TODO check if the sender is the one that is losing / sending the correct amount of funds that we are recieving.
+
+    const index: number = transactionResponse.transaction.message.accountKeys.indexOf(quartzKeypair.publicKey.toBase58())
+    const preBalance: number = transactionResponse.meta.preBalances[index]
+    const postBalance: number = transactionResponse.meta.postBalances[index]
+
+    const balanceChange = postBalance - preBalance;
+    console.log(`pre balance : ${preBalance}, post balance: ${postBalance}`)
+    console.log(`balance change: `, balanceChange)
+
+    return balanceChange
+}
