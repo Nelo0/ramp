@@ -1,6 +1,6 @@
 import { Keypair, PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
 import { NATIVE_MINT, createMintToCheckedInstruction, createSyncNativeInstruction, createTransferCheckedInstruction } from '@solana/spl-token'
-import { offrampDepositATA, quartzKeypair, quartzStableATA, quartzWSolATA, stableTokenMint } from './utils/enviroment.js';
+import { offrampDepositATA, quartzKeypair, quartzStableATA, quartzWSolATA, stableTokenMint } from '../utils/enviroment.js';
 
 //Owner of the mock offrampDepositATA
 //HnQWqxiMy83iw8iMgX5JQD9WwTaA8wa62Zyt9x1vuaeE

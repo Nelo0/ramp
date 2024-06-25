@@ -1,8 +1,8 @@
 import { AddressLookupTableAccount, PublicKey, TransactionInstruction, TransactionMessage, VersionedTransaction } from '@solana/web3.js';
 import { ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, createTransferCheckedInstruction, getAssociatedTokenAddressSync } from '@solana/spl-token';
 import { connection, quartzKeypair, quartzStableATA, stableTokenMint } from '../utils/enviroment.js';
-import { convertDecimalPlaces } from '../utils/utils.js';
 import { initiateEuroeBurn } from './euroe.js';
+import { formatAmountForEuroe } from '../utils/utils.js';
 
 export type TransactionInfo = {
   transaction: VersionedTransaction,
@@ -23,7 +23,7 @@ export const getSwapIntructions = async (amount: number) => {
   console.log("expectedOutputAmount",  expectedOutputAmount)
   console.log("worstCaseOutput",  worstCaseOutput)
 
-  const euroeOfframpAmount = convertDecimalPlaces(worstCaseOutput, 6, 18)
+  const euroeOfframpAmount = formatAmountForEuroe(worstCaseOutput)
   console.log("euroeOfframpAmount",  euroeOfframpAmount)
 
   const euroeDepositAddress = await initiateEuroeBurn(euroeOfframpAmount)
@@ -76,7 +76,7 @@ export const getSwapIntructions = async (amount: number) => {
     6 // decimals
   );
 
-  const swapInstructionsArray = [    
+  const swapInstructionsArray = [
     ...setupInstructions.map(deserializeInstruction),
     deserializeInstruction(swapInstructionPayload),
     sendToOfframpInstruction,
@@ -88,7 +88,7 @@ export const getSwapIntructions = async (amount: number) => {
     instructions: swapInstructionsArray,
   }).compileToV0Message(addressLookupTableAccounts);
   const transaction = new VersionedTransaction(messageV0);
-  
+
   const info: TransactionInfo = {
     transaction: transaction,
     computeUnits: null,
