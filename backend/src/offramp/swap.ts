@@ -1,8 +1,9 @@
-import { AddressLookupTableAccount, PublicKey, TransactionInstruction, TransactionMessage, VersionedTransaction } from '@solana/web3.js';
-import { ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, createTransferCheckedInstruction, getAssociatedTokenAddressSync } from '@solana/spl-token';
+import { AddressLookupTableAccount, PublicKey, TransactionInstruction, VersionedTransaction } from '@solana/web3.js';
 import { connection, quartzKeypair, quartzStableATA, stableTokenMint } from '../utils/enviroment.js';
 import { initiateEuroeBurn } from './euroe.js';
 import { formatAmountForEuroe } from '../utils/utils.js';
+import { getOrCreateATA, instructionsIntoV0 } from '../utils/transactionSender.js';
+import { createTransferCheckedInstruction } from '@solana/spl-token';
 
 export type TransactionInfo = {
   transaction: VersionedTransaction,
@@ -20,15 +21,15 @@ export const getSwapIntructions = async (amount: number) => {
 
   const expectedOutputAmount = Number(quoteResponse.outAmount);
   const worstCaseOutput = Number(quoteResponse.otherAmountThreshold);
-  console.log("expectedOutputAmount",  expectedOutputAmount)
-  console.log("worstCaseOutput",  worstCaseOutput)
+  console.log("expectedOutputAmount", expectedOutputAmount)
+  console.log("worstCaseOutput", worstCaseOutput)
 
   const euroeOfframpAmount = formatAmountForEuroe(worstCaseOutput)
-  console.log("euroeOfframpAmount",  euroeOfframpAmount)
+  console.log("euroeOfframpAmount", euroeOfframpAmount)
 
   const euroeDepositAddress = await initiateEuroeBurn(euroeOfframpAmount)
-  const euroeATA = getAssociatedTokenAddressSync(stableTokenMint, new PublicKey(euroeDepositAddress), undefined, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID);
-  //TODO: IF euroeATA is not initialized, initialize the ATA
+  const euroeATA = await getOrCreateATA(stableTokenMint, euroeDepositAddress);
+  if (euroeATA == undefined) throw Error("Could not find or create Euroe offramp ATA")
 
   //TODO: IN the future we could use the MAX accounts property to ensure that the wrapping, swap and send instructions all fit in one transaction.
   const instructions = await (
@@ -64,8 +65,6 @@ export const getSwapIntructions = async (amount: number) => {
     ...(await getAddressLookupTableAccounts(addressLookupTableAddresses))
   );
 
-  const blockhash = (await connection.getLatestBlockhash()).blockhash;
-
   //send to QUARTZ EUROe address
   const sendToOfframpInstruction = createTransferCheckedInstruction(
     quartzStableATA, // from (should be a token account)
@@ -82,12 +81,7 @@ export const getSwapIntructions = async (amount: number) => {
     sendToOfframpInstruction,
   ]
 
-  const messageV0 = new TransactionMessage({
-    payerKey: quartzKeypair.publicKey,
-    recentBlockhash: blockhash,
-    instructions: swapInstructionsArray,
-  }).compileToV0Message(addressLookupTableAccounts);
-  const transaction = new VersionedTransaction(messageV0);
+  const transaction = await instructionsIntoV0(swapInstructionsArray, quartzKeypair);
 
   const info: TransactionInfo = {
     transaction: transaction,

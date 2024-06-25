@@ -1,7 +1,7 @@
-import { ComputeBudgetProgram, Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction, TransactionInstruction, TransactionMessage, VersionedMessage, VersionedTransaction, sendAndConfirmTransaction } from "@solana/web3.js";
+import { ComputeBudgetProgram, PublicKey, SystemProgram, TransactionInstruction, VersionedMessage } from "@solana/web3.js";
 import { connection, quartzKeypair } from "../utils/enviroment.js";
 import { getSimulationComputeUnits } from "@solana-developers/helpers"
-import { sendTransactionLogic } from "../utils/transactionSender.js";
+import { instructionsIntoV0, sendTransactionLogic } from "../utils/transactionSender.js";
 
 export const returnFunds = async (toAddress: PublicKey, amount: number, splToken: boolean) => {
 
@@ -14,20 +14,7 @@ export const returnFunds = async (toAddress: PublicKey, amount: number, splToken
         instructions = await returnLamportIx(toAddress, amount);
 
     }
-
-    let blockhash = await connection.getLatestBlockhash()
-
-    const messageV0 = new TransactionMessage({
-        payerKey: quartzKeypair.publicKey,
-        recentBlockhash: blockhash.blockhash,
-        instructions,
-    }).compileToV0Message();
-
-    const transaction = new VersionedTransaction(messageV0);
-
-    // sign your transaction with the required `Signers`
-    transaction.sign([quartzKeypair]);
-
+    const transaction = await instructionsIntoV0(instructions, quartzKeypair)
     const sig = await sendTransactionLogic(transaction)
 
     if (sig == "") {
