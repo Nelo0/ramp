@@ -6,6 +6,7 @@ import { addStringToJson, filterProcessedSignatures } from "./utils/processing.j
 import { sendTransactionLogic } from "./utils/transactionSender.js";
 import { returnFunds } from "./offramp/returnFunds.js";
 import { PublicKey } from "@solana/web3.js";
+import { getMockOfframpInfo } from "./offramp/mockOfframp.js";
 
 // Create a WebSocket connection
 export const openHeliusWs = () => {
@@ -80,9 +81,7 @@ export const openHeliusWs = () => {
 
             let transactionInfo: TransactionInfo;
             if (ENV === "devnet") {
-                //TODO change so that it returns instructions instread of transactions
-                //transactionInfo = getMockOfframpTx(depositAmount);
-                transactionInfo = await getSwapTransactionInfo(depositAmount);
+                transactionInfo = await getMockOfframpInfo(depositAmount);
             } else {
                 transactionInfo = await getSwapTransactionInfo(depositAmount);
             }

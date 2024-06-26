@@ -1,6 +1,8 @@
 import { Keypair, PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
 import { NATIVE_MINT, createMintToCheckedInstruction, createSyncNativeInstruction, createTransferCheckedInstruction } from '@solana/spl-token'
 import { offrampDepositATA, quartzKeypair, quartzStableATA, quartzWSolATA, stableTokenMint } from '../utils/enviroment.js';
+import { TransactionInfo } from './swap.js';
+import { instructionsIntoV0 } from '../utils/transactionSender.js';
 
 //Owner of the mock offrampDepositATA
 //HnQWqxiMy83iw8iMgX5JQD9WwTaA8wa62Zyt9x1vuaeE
@@ -15,23 +17,18 @@ const mockStableOfframpKeypair = Keypair.fromSecretKey(
     ])
 );
 
-export const getMockOfframpTx = (depositAmount: number) => {
+export const getMockOfframpInfo = async (depositAmount: number) => {
 
     //wrap SOL into wSOL
-    const offrampSolTransaction = new Transaction()
-        .add(
-            SystemProgram.transfer({
-                fromPubkey: quartzKeypair.publicKey,
-                toPubkey: quartzWSolATA,
-                lamports: depositAmount
-            }),
-            createSyncNativeInstruction(
-                quartzWSolATA
-            )
-        )
-
-    //MOCK SWAP -> SEND LAMPORTS TO OTHER ADDRESS
-    offrampSolTransaction.add(
+    const instructions = [
+        SystemProgram.transfer({
+            fromPubkey: quartzKeypair.publicKey,
+            toPubkey: quartzWSolATA,
+            lamports: depositAmount
+        }),
+        createSyncNativeInstruction(
+            quartzWSolATA
+        ),
         createTransferCheckedInstruction(
             quartzWSolATA, // from (should be a token account)
             NATIVE_MINT, // mint
@@ -39,21 +36,14 @@ export const getMockOfframpTx = (depositAmount: number) => {
             quartzKeypair.publicKey, // from's owner
             depositAmount, // amount, if your deciamls is 8, send 10^8 for 1 token
             9 // decimals
-        )
-    )
-
-    offrampSolTransaction.add(
-        //for mock -> send lamports to random address, mint tokens to quartz ata.
+        ),
         createMintToCheckedInstruction(
             stableTokenMint, // mint
             quartzStableATA, // receiver (should be a token account)
             quartzKeypair.publicKey, // mint authority
             1e6, // amount. if your decimals is 8, you mint 10^8 for 1 token.
             6 // decimals
-        )
-    )
-    //send to QUARTZ EUROe address.
-    offrampSolTransaction.add(
+        ),
         createTransferCheckedInstruction(
             quartzStableATA, // from (should be a token account)
             stableTokenMint, // mint
@@ -62,8 +52,14 @@ export const getMockOfframpTx = (depositAmount: number) => {
             1e6, // amount, if your deciamls is 8, send 10^8 for 1 token
             6 // decimals
         )
-    )
-    //TODO make this return a Transaction info object with a versioned transaction    
+    ]
 
-    return offrampSolTransaction;
+    const transaction = await instructionsIntoV0(instructions, quartzKeypair)
+
+    return {
+        transaction: transaction,
+        computeUnits: null,
+        worstOutput: 1e6,
+        bestOutput: 1e6
+    } as TransactionInfo
 }
