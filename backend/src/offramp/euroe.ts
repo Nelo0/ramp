@@ -114,19 +114,17 @@ export const initiateEuroeBurn = async (amount: number) => {
 
     if (bearerToken == "") {
         //set bearerToken to be apikey
-        console.log("Couldn't get bearer token for euroe")
-        return;
+        throw Error("Couldn't get bearer token for euroe");
     }
 
     const burnInstructionData = await createBurnInstruction(bearerToken, amount);
-    const burnAddress = burnInstructionData.fromAccount;
+    const burnAddress: string = burnInstructionData.fromAccount;
     const burnInstructionId = burnInstructionData.uuid;
 
     console.log("Burn address: ", burnAddress)
     console.log("Burn instruction ID: ", burnInstructionId)
 
     // TODO Store Instruction ID.
-
     return burnAddress;
 }
 

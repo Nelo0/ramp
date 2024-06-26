@@ -48,40 +48,28 @@ export const sendTransactionLogic = async (tx: VersionedTransaction | Transactio
     return "";
 }
 
-export const getOrCreateATA = async (mint: PublicKey, owner: PublicKey) => {
+export type CreateATA = {
+    address: PublicKey,
+    instruction: TransactionInstruction | undefined
+}
+
+export const getATAOrInstruction = async (mint: PublicKey, owner: PublicKey) => {
     const associatedToken = getAssociatedTokenAddressSync(mint, owner, false, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID);
     let account: Account;
     try {
         account = await getAccount(connection, associatedToken, "finalized", TOKEN_PROGRAM_ID);
     } catch (error: unknown) {
         if (error instanceof TokenAccountNotFoundError || error instanceof TokenInvalidAccountOwnerError) {
-            try {
-                const instructions = [
-                    createAssociatedTokenAccountInstruction(
-                        quartzKeypair.publicKey,
-                        associatedToken,
-                        owner,
-                        mint,
-                        TOKEN_PROGRAM_ID,
-                        ASSOCIATED_TOKEN_PROGRAM_ID
-                    )
-                ]
-                const transaction = await instructionsIntoV0(instructions, quartzKeypair)
-                const result = await sendTransactionLogic(transaction);
+            const instruction = createAssociatedTokenAccountInstruction(
+                quartzKeypair.publicKey,
+                associatedToken,
+                owner,
+                mint,
+                TOKEN_PROGRAM_ID,
+                ASSOCIATED_TOKEN_PROGRAM_ID
+            )
 
-                if (result != "") {
-                    console.log("Successfully created offramp ATA")
-                } else {
-                    console.log("Failed to create offramp ATA")
-                    return
-                }
-            } catch (error: unknown) {
-                // Ignore all errors; for now there is no API-compatible way to selectively ignore the expected
-                // instruction error if the associated account exists already.
-            }
-
-            // Now this should always succeed
-            account = await getAccount(connection, associatedToken, "finalized", TOKEN_PROGRAM_ID);
+            return { address: associatedToken, instruction: instruction } as CreateATA
         } else {
             throw error;
         }
@@ -90,7 +78,7 @@ export const getOrCreateATA = async (mint: PublicKey, owner: PublicKey) => {
     if (!account.mint.equals(mint)) throw new TokenInvalidMintError();
     if (!account.owner.equals(owner)) throw new TokenInvalidOwnerError();
 
-    return account.address;
+    return { address: associatedToken, instruction: undefined } as CreateATA
 }
 
 export const instructionsIntoV0 = async (txInstructions: TransactionInstruction[], signer: Signer) => {

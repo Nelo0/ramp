@@ -2,7 +2,7 @@ import { AddressLookupTableAccount, PublicKey, TransactionInstruction, Versioned
 import { connection, quartzKeypair, quartzStableATA, stableTokenMint } from '../utils/enviroment.js';
 import { initiateEuroeBurn } from './euroe.js';
 import { formatAmountForEuroe } from '../utils/utils.js';
-import { getOrCreateATA, instructionsIntoV0 } from '../utils/transactionSender.js';
+import { getATAOrInstruction, instructionsIntoV0 } from '../utils/transactionSender.js';
 import { createTransferCheckedInstruction } from '@solana/spl-token';
 
 export type TransactionInfo = {
@@ -28,8 +28,7 @@ export const getSwapIntructions = async (amount: number) => {
   console.log("euroeOfframpAmount", euroeOfframpAmount)
 
   const euroeDepositAddress = await initiateEuroeBurn(euroeOfframpAmount)
-  const euroeATA = await getOrCreateATA(stableTokenMint, euroeDepositAddress);
-  if (euroeATA == undefined) throw Error("Could not find or create Euroe offramp ATA")
+  const euroeATAObj = await getATAOrInstruction(stableTokenMint, new PublicKey(euroeDepositAddress))
 
   //TODO: IN the future we could use the MAX accounts property to ensure that the wrapping, swap and send instructions all fit in one transaction.
   const instructions = await (
@@ -69,7 +68,7 @@ export const getSwapIntructions = async (amount: number) => {
   const sendToOfframpInstruction = createTransferCheckedInstruction(
     quartzStableATA, // from (should be a token account)
     stableTokenMint, // mint
-    euroeATA, // to  - euroe address
+    euroeATAObj.address,// to  - euroe address
     quartzKeypair.publicKey, // from owner
     worstCaseOutput, // amount, if your deciamls is 8, send 10^8 for 1 token
     6 // decimals
@@ -80,6 +79,7 @@ export const getSwapIntructions = async (amount: number) => {
     deserializeInstruction(swapInstructionPayload),
     sendToOfframpInstruction,
   ]
+  if (euroeATAObj.instruction != undefined) swapInstructionsArray.unshift(euroeATAObj.instruction)
 
   const transaction = await instructionsIntoV0(swapInstructionsArray, quartzKeypair);
 
