@@ -2,11 +2,12 @@ import WebSocket from "ws";
 import { getBalanceChange, getSignaturesForAddress, getTransaction } from "./utils/utils.js";
 import { TransactionInfo, getSwapIntructions as getSwapTransactionInfo } from "./offramp/swap.js";
 import { ENV, QUARTZ_USER_LIST, SOLANA_RPC_ENDPOINT, SOLANA_WS_ENDPOINT, quartzKeypair } from "./utils/enviroment.js";
-import { addStringToJson, filterProcessedSignatures } from "./utils/processing.js";
+import { filterProcessedSignaturesNew } from "./utils/processing.js";
 import { sendTransactionLogic } from "./utils/transactionSender.js";
 import { returnFunds } from "./offramp/returnFunds.js";
 import { PublicKey } from "@solana/web3.js";
 import { getMockOfframpInfo } from "./offramp/mockOfframp.js";
+import { addSignatures } from "./database/schema.js";
 
 // Create a WebSocket connection
 export const openHeliusWs = () => {
@@ -40,11 +41,8 @@ export const openHeliusWs = () => {
         const signatureObjects = prevTransactionData.result;
 
         //filter out the signatures that are already processed
-        let signatures = await filterProcessedSignatures(signatureObjects);
+        let signatures = await filterProcessedSignaturesNew(signatureObjects);
 
-        if (signatures == undefined) {
-            return;
-        }
         console.log("New signatures to process: ", signatures);
 
         for (const signature of signatures) {
@@ -54,7 +52,7 @@ export const openHeliusWs = () => {
             const depositAmount = getBalanceChange(transaction);
             if (depositAmount <= 0) {
                 //No amount deposited or users deposit transaction failed, store tx as processed
-                await addStringToJson(signature);
+                await addSignatures([signature]);
                 continue
             }
 
@@ -65,7 +63,8 @@ export const openHeliusWs = () => {
             if (!QUARTZ_USER_LIST.includes(userAddress)) {
                 if (userAddress == quartzDepositAddress) {
                     console.log("Quartz sent this transaction, dont process it more")
-                    await addStringToJson(signature);
+                    await addSignatures([signature]);
+
                 } else {
                     //if not sent by quartz
                     console.log("Neither Quartz or a Quartz user sent this transaction, sending funds back to sender")
@@ -73,7 +72,8 @@ export const openHeliusWs = () => {
                     if (!result) {
                         console.log(`Failed to return ${depositAmount} to sender ${userAddress}`)
                     } else {
-                        await addStringToJson(signature);
+                        await addSignatures([signature]);
+
                     }
                 }
                 continue
@@ -105,9 +105,9 @@ export const openHeliusWs = () => {
             }
 
             console.log("Offramp transaction SUCCESS!, adding txId for deposit and offramp to processed transactions to database")
-            //add txId to json file
-            await addStringToJson(signature);
-            await addStringToJson(txId);
+            //add txId to database
+            await addSignatures([signature, txId]);
+
         }
     };
 

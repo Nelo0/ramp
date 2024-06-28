@@ -81,7 +81,7 @@ export const getSwapIntructions = async (amount: number) => {
   ]
   if (euroeATAObj.instruction != undefined) swapInstructionsArray.unshift(euroeATAObj.instruction)
 
-  const transaction = await instructionsIntoV0(swapInstructionsArray, quartzKeypair);
+  const transaction = await instructionsIntoV0(swapInstructionsArray, quartzKeypair, addressLookupTableAccounts);
 
   const info: TransactionInfo = {
     transaction: transaction,

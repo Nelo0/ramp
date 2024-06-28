@@ -1,4 +1,4 @@
-import { PublicKey, Signer, Transaction, TransactionInstruction, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import { AddressLookupTableAccount, PublicKey, Signer, Transaction, TransactionInstruction, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import { SOLANA_RPC_ENDPOINT, connection, quartzKeypair } from "./enviroment.js";
 import { delay, getTransaction } from "./utils.js";
 import { ASSOCIATED_TOKEN_PROGRAM_ID, Account, TOKEN_PROGRAM_ID, TokenAccountNotFoundError, TokenInvalidAccountOwnerError, TokenInvalidMintError, TokenInvalidOwnerError, createAssociatedTokenAccountInstruction, getAccount, getAssociatedTokenAddressSync } from "@solana/spl-token";
@@ -81,14 +81,14 @@ export const getATAOrInstruction = async (mint: PublicKey, owner: PublicKey) => 
     return { address: associatedToken, instruction: undefined } as CreateATA
 }
 
-export const instructionsIntoV0 = async (txInstructions: TransactionInstruction[], signer: Signer) => {
+export const instructionsIntoV0 = async (txInstructions: TransactionInstruction[], signer: Signer, lookupTables?: AddressLookupTableAccount[]) => {
     let blockhash = await connection.getLatestBlockhash()
 
     const messageV0 = new TransactionMessage({
         payerKey: signer.publicKey,
         recentBlockhash: blockhash.blockhash,
         instructions: txInstructions,
-    }).compileToV0Message();
+    }).compileToV0Message(lookupTables);
 
     const transaction = new VersionedTransaction(messageV0);
 

@@ -6,6 +6,4 @@ const connectionString = process.env.DATABASE_URL
 console.log(connectionString)
 const sql = postgres(connectionString!)
 
-//console.log("Connection: ", sql)
-
 export default sql
