@@ -3,31 +3,76 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
+  --max-width: 650px;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+  --color-text: #FFFFFF;
+  --color-text-light: #FFFFFFD9;
+  --color-background: #0B111D;
+  --color-background-shade: #343946;
+  --color-primary: #2987C8;
+  --color-primary-shade: #206C92;
+  --color-accent: #AC5B99;
+  --color-success: #27C667;
+  --color-warning: #E09400;
+  --color-failure: #E80000;
+
+  --size-h1: 53.57px;
+  --size-h2: 44.79px;
+  --size-h3: 31.1px;
+  --size-h4: 25.92px;
+  --size-p: 18px
+  --size-small: 15px;
+
+  --font-weight: 300;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: var(--color-text);
+  background: var(--color-background);
+  font-size: var(--size-p);
+  font-weight: var(--font-weight);
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+h1 {
+  font-size: var(--size-h1);
+}
+
+h2 {
+  font-size: var(--size-h2);
+}
+
+h3 {
+  font-size: var(--size-h3);
+}
+
+h4 {
+  font-size: var(--size-h4);
+}
+
+small {
+  font-size: var(--size-small);
+}
+
+.quartz-logo {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  padding: 10px;
+  width: 220px;
+  height: auto;
+}
+
+.glass {
+  /* Black Shadow */
+  -webkit-box-shadow: -10px 10px 24px 0px rgba(0,0,0,0.3);
+  -moz-box-shadow: -10px 10px 24px 0px rgba(0,0,0,0.3);
+  box-shadow: -10px 10px 24px 0px rgba(0,0,0,0.3);
+
+  /* Primary Shadow */
+  -webkit-box-shadow: -10px 10px 24px 0px rgba(41,135,200,0.12);
+  -moz-box-shadow: -10px 10px 24px 0px rgba(41,135,200,0.12);
+  box-shadow: -10px 10px 24px 0px rgba(41,135,200,0.12);
+  
+  /* Glass Blur */
+  backdrop-filter: blur(25px);
 }

@@ -1,0 +1,13 @@
+.main-panel {
+    width: var(--max-width);
+    margin: auto;
+    margin-top: 50px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px;
+    
+    border-radius: 24px;
+}
