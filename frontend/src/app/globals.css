@@ -88,5 +88,10 @@ button {
   backdrop-filter: blur(25px);
 
   /* Background */
-  background: black;
+  background-image: 
+    url("/noise.png"),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%),
+    linear-gradient(#ffffff03, #ffffff03),
+    linear-gradient(#0B111D80, #0B111D80);
+  background-size: 17% auto, auto, auto, auto;
 }
