@@ -16,6 +16,10 @@
   --color-warning: #E09400;
   --color-failure: #E80000;
 
+  --gradient-glass-stroke:
+    linear-gradient(65deg, rgba(41,135,200,0.02) 0%, rgba(41,135,200,0.22) 100%),
+    linear-gradient(65deg, rgba(188,188,188,0.12) 0%, rgba(235,235,235,0.25) 100%);
+
   --size-h1: 53.57px;
   --size-h2: 44.79px;
   --size-h3: 31.1px;
@@ -53,13 +57,20 @@ small {
   font-size: var(--size-small);
 }
 
-.quartz-logo {
-  position: absolute;
-  top: 40px;
-  left: 40px;
-  padding: 10px;
-  width: 220px;
-  height: auto;
+button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  gap: 10px;
+  padding: 14px 22px;
+  background: var(--gradient-glass-stroke);
+
+  border: double 1px transparent;
+  border-radius: 14px;
+  background-image: var(--gradient-glass-stroke);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
 }
 
 .glass {
@@ -75,4 +86,7 @@ small {
   
   /* Glass Blur */
   backdrop-filter: blur(25px);
+
+  /* Background */
+  background: black;
 }

@@ -1,0 +1,32 @@
+.quartz-logo {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    padding: 10px;
+    width: 220px;
+    height: auto;
+}
+
+.heading {
+    font-size: var(--size-h3);
+}
+
+.subheading {
+    font-size: var(--size-p);
+    color: var(--color-text-light);
+    padding-top: 6px;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 80px;
+}
+
+.button-link {
+    text-decoration: underline;
+    border: 0px;
+    background: transparent;
+}
