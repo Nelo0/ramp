@@ -4,6 +4,7 @@ import Field from "@/components/Field";
 import MainPanel from "@/components/MainPanel";
 import Image from "next/image";
 import { useState } from "react";
+import { hashToDisplayString } from "@/utils/solanaUtils";
 
 export default function OffRamp() {
     // TODO -> keep this constants somewhere better
@@ -13,11 +14,8 @@ export default function OffRamp() {
     const [useSNS, setUseSNS] = useState(true);
     const switchSNSText = useSNS ? "Switch to wallet address" : "Switch to SNS";
     const addressHeading = useSNS ? "Solana Name Service" : "Solana wallet address";
-
-    
-    const addressWalletDisplay = ADDRESS_WALLET.slice(0, 4) + "..." + ADDRESS_WALLET.slice(-4);
     const addressCopy = useSNS ? ADDRESS_SNS : ADDRESS_WALLET;
-    const addressDisplay = useSNS ? ADDRESS_SNS : addressWalletDisplay;
+    const addressDisplay = useSNS ? ADDRESS_SNS : hashToDisplayString(ADDRESS_WALLET);
 
     return (
         <MainPanel>
