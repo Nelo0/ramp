@@ -8,6 +8,11 @@ import { returnFunds } from "./offramp/returnFunds.js";
 import { PublicKey } from "@solana/web3.js";
 import { getMockOfframpInfo } from "./offramp/mockOfframp.js";
 import { addSignatures } from "./database/schema.js";
+import express, { Application, Request, Response } from 'express';
+import routes from "./routes/index.js";
+
+const app: Application = express();
+const port: number = 3000;
 
 // Create a WebSocket connection
 export const openHeliusWs = () => {
@@ -123,3 +128,14 @@ export const openHeliusWs = () => {
 }
 
 let socket = openHeliusWs();
+
+app.use(express.json());
+app.use('/api', routes);
+
+app.get('/', (req: Request, res: Response) => {
+  res.send('Hello, world!');
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
