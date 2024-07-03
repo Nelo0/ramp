@@ -1,3 +1,9 @@
+export enum Status {
+    FAIL,
+    PROCESSING,
+    SUCCESS
+}
+
 export interface Transaction {
     offRamp: boolean;
     inputCurrency: string; // Change to Token type?
@@ -10,4 +16,5 @@ export interface Transaction {
     iban: string;
     bic: string;
     transactionHash: string; // Change to Solana Hash type?
+    status: Status;
 }

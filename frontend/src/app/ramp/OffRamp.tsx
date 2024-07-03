@@ -8,7 +8,7 @@ import { useState } from "react";
 export default function OffRamp() {
     // TODO -> keep this constants somewhere better
     const ADDRESS_SNS = "quartzpay.sol";
-    const ADDRESS_WALLET = "ABJLK3RrRwG8LdvQiSLV9ZG4Ca8L5pjDN3Gjganz3BTa";
+    const ADDRESS_WALLET = "ABJLK3RrRwG8LdvQiSLV9ZG4Ca8L5pjDN3Gjganz3BTa"; // TODO - Replace with Solana address type? Or check it's a valid address?
 
     const [useSNS, setUseSNS] = useState(true);
     const switchSNSText = useSNS ? "Switch to wallet address" : "Switch to SNS";
@@ -23,10 +23,10 @@ export default function OffRamp() {
         <MainPanel>
             <div>
                 <h1 className={styles["heading"]}>Deposit Addresses</h1>
-                <h2 className={styles["subheading"]}>Convert crypto to fiat</h2>
+                <h2 className={`light ${styles["subheading"]}`}>Convert crypto to fiat</h2>
             </div>
 
-            <QRCode/>
+            <QRCode address={ADDRESS_WALLET}/>
 
             <Field heading={addressHeading} copyText={addressCopy} large={true}>
                 <p>{addressDisplay}</p>

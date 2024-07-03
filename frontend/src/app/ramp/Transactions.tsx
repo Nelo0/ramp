@@ -1,6 +1,6 @@
-import TransactionCard from "@/components/TransactionCard";
+import TransactionCard from "@/components/Transaction/TransactionCard";
 import styles from "./page.module.css";
-import { Transaction } from "@/model/Transaction";
+import { Status, Transaction } from "@/model/Transaction";
 
 export default function Transactions() {
     // TODO - Remove hardcoding
@@ -16,7 +16,8 @@ export default function Transactions() {
             transactionFeeEuro: 1.08,
             iban: "IE29AIBK93115212345678",
             bic: "AIBKIE2D",
-            transactionHash: "5iqJ4vFh9mkne3N8f7znEZFb8mWX5BBy6KgHm1yEgecdyy1inHozMWootqxGfDJiyVHqvRYF45SjxRARZNtK699K"
+            transactionHash: "5iqJ4vFh9mkne3N8f7znEZFb8mWX5BBy6KgHm1yEgecdyy1inHozMWootqxGfDJiyVHqvRYF45SjxRARZNtK699K",
+            status: Status.SUCCESS
         }
     ];
 

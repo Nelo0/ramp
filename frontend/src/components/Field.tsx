@@ -39,7 +39,9 @@ export default function Field({large = false, heading, copyText, onClick, childr
         <div className={styles["field-wrapper"]}>
             <small>{heading}</small>
             <button className={className} onClick={onClick ? onClick : handleCopy}>
-                {displayCopied && <p>Copied</p>}
+                {displayCopied && 
+                    <p className="light">Copied</p>
+                }
                 {!displayCopied && children}
             </button>
         </div>

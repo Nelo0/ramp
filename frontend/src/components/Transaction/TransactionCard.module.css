@@ -1,0 +1,29 @@
+.transaction-card-wrapper {
+    border-radius: 16px;
+    width: 100%;
+}
+
+.transaction-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 50px;
+
+    padding: 25px 20px;
+    width: 100%;
+}
+
+
+
+.currencies {
+    display: flex;
+    align-items: center;
+
+    gap: 25px;
+}
+
+.basic-info {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}

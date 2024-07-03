@@ -50,7 +50,3 @@
 .field.copied {
     justify-content: center;
 }
-
-.field.copied p{
-    color: var(--color-text-light);
-}

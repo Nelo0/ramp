@@ -1,0 +1,9 @@
+.currency-info {
+    display: flex;
+    align-items: center;
+}
+
+.currency-name {
+    margin-left: 14px;
+    margin-right: 6px;
+}
