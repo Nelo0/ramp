@@ -17,6 +17,17 @@
     align-items: center;
 }
 
+.field:hover {
+    --overlay-color: rgba(255, 255, 255, 0.03);
+    background:
+        linear-gradient(var(--overlay-color), var(--overlay-color)),
+        linear-gradient(var(--color-background), var(--color-background));
+}
+
+.field:active {
+    background: var(--color-background-shade);
+}
+
 .field img{
     height: 23px;
     width: 23px;
@@ -34,4 +45,12 @@
 .field.large img{
     height: 36px;
     width: 36px;
+}
+
+.field.copied {
+    justify-content: center;
+}
+
+.field.copied p{
+    color: var(--color-text-light);
 }
