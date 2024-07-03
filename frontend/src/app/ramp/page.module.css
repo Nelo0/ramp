@@ -25,4 +25,5 @@
     text-decoration: underline;
     border: 0px;
     background: transparent;
+    min-width: 230px;
 }

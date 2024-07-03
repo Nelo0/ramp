@@ -2,24 +2,17 @@ import React, { ReactElement, useEffect, useState } from "react";
 import styles from "./Field.module.css";
 
 interface FieldProps {
-    heading: string;
     large?: boolean;
+    heading: string;
+    copyText?: string;
     onClick?: () => void;
     children: React.ReactNode;
 }
 
-export default function Field({heading, onClick, large = false, children} : FieldProps) {
-    // Get text to copy from the first child tag
-    const copyTextElement = React.Children.toArray(children)[0] as ReactElement;
-    let copyText = "";
-    if (copyTextElement && copyTextElement.props && copyTextElement.props.children) {
-        copyText = copyTextElement.props.children;
-    }
-
-
-    // Copy text and display feedback for set time
+export default function Field({large = false, heading, copyText, onClick, children} : FieldProps) {
     const copiedDuration = 1200;
 
+    // Copy text and display feedback for set time
     const [displayCopied, setDisplayCopied] = useState(false);
     useEffect(() => {
         let timer: NodeJS.Timeout;
@@ -34,7 +27,7 @@ export default function Field({heading, onClick, large = false, children} : Fiel
     }, [displayCopied])
 
     const handleCopy = () => {
-        if (copyText == "") return;
+        if (copyText == undefined) return;
         navigator.clipboard.writeText(copyText);
         setDisplayCopied(true);
     }
