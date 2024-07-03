@@ -4,6 +4,7 @@ import MainPanel from "@/components/MainPanel";
 import Image from "next/image";
 import styles from "./page.module.css";
 import QRCode from "@/components/QRCode";
+import Field from "@/components/Field";
 
 export default function OnRamp() {
     return (
@@ -19,21 +20,29 @@ export default function OnRamp() {
             </a>
             
             <MainPanel>
-                <h1 className={styles["heading"]}>Deposit Addresses</h1>
-                <h2 className={styles["subheading"]}>Convert crypto to fiat</h2>
+                <div>
+                    <h1 className={styles["heading"]}>Deposit Addresses</h1>
+                    <h2 className={styles["subheading"]}>Convert crypto to fiat</h2>
+                </div>
 
-                <div className={styles["content-container"]}>
-                    <QRCode/>
+                <QRCode/>
 
+                <Field heading={"Solana Name Service"} large={true}>
+                    <p>quartzpay.sol</p>
+                    <Image
+                        src="/copy.svg"
+                        alt="Copy"
+                        height={0}
+                        width={0}
+                    />
+                </Field>
+                
+                <div className={styles["buttons-container"]}>
                     <button
                         className={styles["button-link"]}
-                        onClick={() => console.log("foo")}
+                        onClick={() => console.log("click")}
                     >
                         Switch to wallet address
-                    </button>
-
-                    <button>
-                        Test Button
                     </button>
                 </div>
             </MainPanel>

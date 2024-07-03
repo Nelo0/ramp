@@ -17,12 +17,8 @@
     padding-top: 6px;
 }
 
-.content-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    gap: 80px;
+.buttons-container {
+    margin-top: auto;
 }
 
 .button-link {

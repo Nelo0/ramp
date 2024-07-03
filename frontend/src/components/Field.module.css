@@ -1,0 +1,37 @@
+.field-wrapper {
+    text-align: left;
+}
+
+.field {
+    margin-top: 6px;
+    width: 425px;
+
+    background: var(--color-background);
+    padding: 14px;
+    border-radius: 14px;
+    border: 1px solid var(--placeholder-glass-stroke);
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.field img{
+    height: 23px;
+    width: 23px;
+}
+
+.field.large{
+    padding: 24px;
+    border-radius: 24px;
+}
+
+.field.large p{
+    font-size: var(--size-h3);
+}
+
+.field.large img{
+    height: 36px;
+    width: 36px;
+}

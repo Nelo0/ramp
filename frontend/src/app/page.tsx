@@ -1,7 +1,7 @@
 export default function Home() {
     return (
         <main>
-            <a href="/on-ramp">On ramp</a>
+            <a href="/ramp">Dashboard</a>
         </main>
     );
 }
