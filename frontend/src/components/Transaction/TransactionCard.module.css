@@ -1,0 +1,76 @@
+.transaction-card-wrapper {
+    border-radius: var(--transaction-card-border-radius);
+    width: 100%;
+}
+
+.transaction-card {
+    width: 100%;
+    padding: 0px;
+
+    flex-direction: column;
+    overflow: hidden;
+    border-width: 1.5px;
+}
+
+.transaction-card:hover {
+    --overlay-color: rgba(255, 255, 255, 0.03);
+    background-image: 
+        url("/noise.png"),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%),
+        linear-gradient(#ffffff0a, #ffffff0a),
+        linear-gradient(#0B111D80, #0B111D80);
+}
+
+.selected {
+    background-image: 
+        url("/noise.png"),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%),
+        linear-gradient(#343946, #343946);
+    background-size: 17% auto, auto, auto;
+}
+
+.selected:hover {
+    background-image: 
+        url("/noise.png"),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%),
+        linear-gradient(#ffffff05, #ffffff05),
+        linear-gradient(#343946, #343946);
+    background-size: 17% auto, auto, auto, auto;
+}
+
+.card-base {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 50px;
+
+    padding: 25px 20px;
+    width: 100%;
+
+    border-radius: 12px;
+    border: 0px;
+    outline: 1.5px solid var(--placeholder-glass-stroke);
+}
+
+.currencies {
+    display: flex;
+    align-items: center;
+
+    gap: 25px;
+}
+
+.basic-info {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+
+.card-details {
+    padding: 20px 0px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 100px;
+    grid-row-gap: 10px;
+    justify-items: left;
+}

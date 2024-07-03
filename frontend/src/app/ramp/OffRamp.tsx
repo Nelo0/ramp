@@ -4,28 +4,27 @@ import Field from "@/components/Field";
 import MainPanel from "@/components/MainPanel";
 import Image from "next/image";
 import { useState } from "react";
+import { hashToDisplayString } from "@/utils/solanaUtils";
 
 export default function OffRamp() {
+    // TODO -> keep this constants somewhere better
     const ADDRESS_SNS = "quartzpay.sol";
-    const ADDRESS_WALLET = "ABJLK3RrRwG8LdvQiSLV9ZG4Ca8L5pjDN3Gjganz3BTa";
+    const ADDRESS_WALLET = "ABJLK3RrRwG8LdvQiSLV9ZG4Ca8L5pjDN3Gjganz3BTa"; // TODO - Replace with Solana address type? Or check it's a valid address?
 
     const [useSNS, setUseSNS] = useState(true);
     const switchSNSText = useSNS ? "Switch to wallet address" : "Switch to SNS";
     const addressHeading = useSNS ? "Solana Name Service" : "Solana wallet address";
-
-    
-    const addressWalletDisplay = ADDRESS_WALLET.slice(0, 4) + "..." + ADDRESS_WALLET.slice(-4);
     const addressCopy = useSNS ? ADDRESS_SNS : ADDRESS_WALLET;
-    const addressDisplay = useSNS ? ADDRESS_SNS : addressWalletDisplay;
+    const addressDisplay = useSNS ? ADDRESS_SNS : hashToDisplayString(ADDRESS_WALLET);
 
     return (
         <MainPanel>
             <div>
                 <h1 className={styles["heading"]}>Deposit Addresses</h1>
-                <h2 className={styles["subheading"]}>Convert crypto to fiat</h2>
+                <h2 className={`light ${styles["subheading"]}`}>Convert crypto to fiat</h2>
             </div>
 
-            <QRCode/>
+            <QRCode address={ADDRESS_WALLET}/>
 
             <Field heading={addressHeading} copyText={addressCopy} large={true}>
                 <p>{addressDisplay}</p>
