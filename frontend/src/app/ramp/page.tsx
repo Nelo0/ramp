@@ -1,9 +1,9 @@
 "use client";
 
-import MainPanel from "@/components/MainPanel";
 import Image from "next/image";
 import styles from "./page.module.css";
 import OffRamp from "./OffRamp";
+import Transactions from "./Transactions";
 
 export default function Ramp() {
     return (
@@ -19,6 +19,8 @@ export default function Ramp() {
             </a>
             
             <OffRamp/>
+
+            <Transactions/>
         </main>
     )
 }

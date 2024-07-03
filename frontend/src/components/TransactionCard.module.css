@@ -1,0 +1,12 @@
+.transaction-card {
+    display: flex;
+    padding: 27px 20px;
+    border-radius: 16px;
+    gap: 50px;
+    width: 100%;
+}
+
+.currencies {
+    display: flex;
+    gap: 25px;
+}

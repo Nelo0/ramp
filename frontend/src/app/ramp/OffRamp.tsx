@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 export default function OffRamp() {
+    // TODO -> keep this constants somewhere better
     const ADDRESS_SNS = "quartzpay.sol";
     const ADDRESS_WALLET = "ABJLK3RrRwG8LdvQiSLV9ZG4Ca8L5pjDN3Gjganz3BTa";
 
