@@ -14,7 +14,7 @@ export const getPastTxObjects = async (address: string) => {
         txObjects.push({
             offRamp: true,
             inputCurrency: "SOL",
-            outputCurrency: "Euro",
+            outputCurrency: "EUR",
             amountInputCurrency: 120,
             amountOutputCurrency: 215.22,
             time: new Date(),
@@ -23,6 +23,7 @@ export const getPastTxObjects = async (address: string) => {
             iban: "IE29AIBK93115212345678",
             bic: "AIBKIE2D",
             transactionHash: sig,
+            depositHash: "signature here",
             status: Status.SUCCESS
         } as TransactionData)
     }
