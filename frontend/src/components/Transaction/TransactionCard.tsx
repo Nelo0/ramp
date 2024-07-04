@@ -18,11 +18,12 @@ export default function TransactionCard({key, transaction} : TransactionCardProp
     const transactionTypeText = transaction.offRamp ? "Off-ramp" : "On-ramp";
     const fiatPrefix = transaction.offRamp ? "Destination" : "Source";
 
-    const formattedDate = transaction.time.toLocaleDateString("en-IE", {
+    const timeObj = new Date(transaction.time);
+    const formattedDate = timeObj.toLocaleDateString("en-IE", {
         month: "long",
         day: "numeric"
     });
-    const formattedTime = transaction.time.toLocaleTimeString("en-IE", {
+    const formattedTime = timeObj.toLocaleTimeString("en-IE", {
         hour: '2-digit',
         minute: '2-digit',
         hour12: false,

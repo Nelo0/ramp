@@ -1,11 +1,15 @@
 import { Router, Request, Response } from 'express';
+import cors from 'cors';
 import { getPastTxObjects } from '../utils/transactionData.js';
 
 const txHistoryRouter = Router();
 
-txHistoryRouter.get('/', (req: Request, res: Response) => {
-    res.send('Transaction history is here');
-});
+const corsOptions = {
+    origin: 'http://localhost:3000', 
+    methods: 'POST',          
+    allowedHeaders: ["Content-Type"]
+};
+txHistoryRouter.use(cors(corsOptions));
 
 txHistoryRouter.post('/', async (req: Request, res: Response) => {
     try {
@@ -17,7 +21,7 @@ txHistoryRouter.post('/', async (req: Request, res: Response) => {
 
         // Get the tx signatures
         const result = await getPastTxObjects(address)
-
+        
         res.json({ result });
     } catch (error) {
         console.log("error: ", error)
