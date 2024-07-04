@@ -12,7 +12,7 @@ import express, { Application, Request, Response } from 'express';
 import routes from "./routes/index.js";
 
 const app: Application = express();
-const port: number = 3000;
+const port: number = 3001;
 
 // Create a WebSocket connection
 export const openHeliusWs = () => {
