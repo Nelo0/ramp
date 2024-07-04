@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { getPastTxObjects } from '../utils/transactionData.js';
+import { getUsersTransactionsArray } from '../database/previousTransactions.js';
 
 const txHistoryRouter = Router();
 
@@ -16,7 +16,7 @@ txHistoryRouter.post('/', async (req: Request, res: Response) => {
         }
 
         // Get the tx signatures
-        const result = await getPastTxObjects(address)
+        const result = await getUsersTransactionsArray(address);
 
         res.json({ result });
     } catch (error) {
