@@ -1,13 +1,18 @@
 import WebSocket from "ws";
 import { getBalanceChange, getSignaturesForAddress, getTransaction } from "./utils/utils.js";
 import { TransactionInfo, getSwapIntructions as getSwapTransactionInfo } from "./offramp/swap.js";
-import { ENV, QUARTZ_USER_LIST, SOLANA_RPC_ENDPOINT, SOLANA_WS_ENDPOINT, quartzKeypair } from "./utils/enviroment.js";
+import { ENV, SOLANA_RPC_ENDPOINT, SOLANA_WS_ENDPOINT, quartzKeypair } from "./utils/enviroment.js";
 import { filterProcessedSignaturesNew } from "./utils/processing.js";
 import { sendTransactionLogic } from "./utils/transactionSender.js";
 import { returnFunds } from "./offramp/returnFunds.js";
 import { PublicKey } from "@solana/web3.js";
 import { getMockOfframpInfo } from "./offramp/mockOfframp.js";
-import { addSignatures } from "./database/schema.js";
+import { addSignatures, getUsersAddressArray } from "./database/schema.js";
+import express, { Application, Request, Response } from 'express';
+import routes from "./routes/index.js";
+
+const app: Application = express();
+const port: number = 3001;
 
 // Create a WebSocket connection
 export const openHeliusWs = () => {
@@ -42,6 +47,8 @@ export const openHeliusWs = () => {
 
         //filter out the signatures that are already processed
         let signatures = await filterProcessedSignaturesNew(signatureObjects);
+        //Get user address list
+        const quartz_user_addresses = await getUsersAddressArray();
 
         console.log("New signatures to process: ", signatures);
 
@@ -60,7 +67,7 @@ export const openHeliusWs = () => {
             const userAddress = accountKeys[0]
 
             //check if the depositor is NOT a quartz user;
-            if (!QUARTZ_USER_LIST.includes(userAddress)) {
+            if (quartz_user_addresses.includes(userAddress)) {
                 if (userAddress == quartzDepositAddress) {
                     console.log("Quartz sent this transaction, dont process it more")
                     await addSignatures([signature]);
@@ -123,3 +130,14 @@ export const openHeliusWs = () => {
 }
 
 let socket = openHeliusWs();
+
+app.use(express.json());
+app.use('/api', routes);
+
+app.get('/', (req: Request, res: Response) => {
+  res.send('Hello, world!');
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});

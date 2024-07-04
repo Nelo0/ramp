@@ -52,7 +52,6 @@ export const getSignaturesForAddress = async (address: string, rpcUrl: string) =
         console.log(`Couldn't find the previous transactions for the address ${address}`);
         return false;
     }
-
     // Return the JSON response
     return response.json();
 };
