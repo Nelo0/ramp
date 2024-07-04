@@ -1,7 +1,9 @@
+import Link from "next/link";
+
 export default function Home() {
     return (
         <main>
-            <a href="/ramp">Dashboard</a>
+            <Link href="/ramp">Dashboard</Link>
         </main>
     );
 }

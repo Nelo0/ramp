@@ -3,6 +3,10 @@
     align-items: center;
 }
 
+.currency-icon {
+    border-radius: 100%;
+}
+
 .currency-name {
     margin-left: 14px;
     margin-right: 6px;

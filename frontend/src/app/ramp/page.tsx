@@ -4,6 +4,7 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import OffRamp from "./OffRamp";
 import Transactions from "./Transactions";
+import Link from "next/link";
 
 export default function Ramp() {
     return (
