@@ -75,7 +75,7 @@ INSERT INTO transaction_data (
     amount_output_currency, gas_fee_euro, transaction_fee_euro, 
     iban, bic, transaction_hash, deposit_hash, status
 ) VALUES (
-    ${user.user_id}, ${offramp}, 'SOL', 'EUR', ${amountInput}, ${amountOutput}, ${gasFeeEuroUi}, ${rampFeeEuroUi}, 
+    ${user.user_id}, ${offramp}, 'SOL', 'EUR', ${amountInputUi}, ${amountOutputUi}, ${gasFeeEuroUi}, ${rampFeeEuroUi}, 
     ${user.iban}, ${user.bic}, 
     ${tx_hash}, ${deposit_hash}, ${status}
 );
