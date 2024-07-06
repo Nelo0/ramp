@@ -15,7 +15,7 @@ FROM
 JOIN 
     users u ON t.user_id = u.user_id
 WHERE 
-    u.wallet_address = 'GgohWvPKDBDgDmkX17GrNMbmAiVy7wQVqx1yzLeG6VGf'
+    u.wallet_address = ${userAddress}
 ORDER BY 
     t.time;
         `
