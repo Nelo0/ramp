@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { getUsersTransactionsArray } from '../database/previousTransactions.js';
+import { getUsersTransactionsArray } from '../database/transactionData.js';
 
 const txHistoryRouter = Router();
 

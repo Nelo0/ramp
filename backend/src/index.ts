@@ -1,7 +1,7 @@
 import WebSocket from "ws";
 import { getBalanceChange, getSignaturesForAddress, getTransaction } from "./utils/utils.js";
 import { TransactionInfo, getSwapIntructions as getSwapTransactionInfo } from "./offramp/swap.js";
-import { ENV, SOLANA_RPC_ENDPOINT, SOLANA_WS_ENDPOINT, quartzKeypair } from "./utils/enviroment.js";
+import { ENV, SOLANA_RPC_ENDPOINT, SOLANA_WS_ENDPOINT, connection, quartzKeypair } from "./utils/enviroment.js";
 import { filterProcessedSignaturesNew } from "./utils/processing.js";
 import { sendTransactionLogic } from "./utils/transactionSender.js";
 import { returnFunds } from "./offramp/returnFunds.js";
@@ -10,6 +10,7 @@ import { getMockOfframpInfo } from "./offramp/mockOfframp.js";
 import { addSignatures, getUsersAddressArray } from "./database/schema.js";
 import express, { Application, Request, Response } from 'express';
 import routes from "./routes/index.js";
+import { addTransactionData } from "./database/transactionData.js";
 
 const app: Application = express();
 const port: number = 3001;
@@ -67,20 +68,24 @@ export const openHeliusWs = () => {
             const userAddress = accountKeys[0]
 
             //check if the depositor is NOT a quartz user;
-            if (quartz_user_addresses.includes(userAddress)) {
+            if (!quartz_user_addresses.includes(userAddress)) {
                 if (userAddress == quartzDepositAddress) {
                     console.log("Quartz sent this transaction, dont process it more")
                     await addSignatures([signature]);
 
                 } else {
                     //if not sent by quartz
+                    //if deposit amount is not greater than transaction fee:
+                    if (depositAmount <= 10000) {
+                        await addSignatures([signature]);
+                        continue
+                    }
                     console.log("Neither Quartz or a Quartz user sent this transaction, sending funds back to sender")
                     const result = await returnFunds(new PublicKey(userAddress), depositAmount, false)
                     if (!result) {
-                        console.log(`Failed to return ${depositAmount} to sender ${userAddress}`)
+                        console.log(`Failed to return ${depositAmount} LAMPORTS to sender ${userAddress}`)
                     } else {
                         await addSignatures([signature]);
-
                     }
                 }
                 continue
@@ -114,7 +119,8 @@ export const openHeliusWs = () => {
             console.log("Offramp transaction SUCCESS!, adding txId for deposit and offramp to processed transactions to database")
             //add txId to database
             await addSignatures([signature, txId]);
-
+            //add TransactionData to database and set it as PROCESSING
+            await addTransactionData(true, "PROCESSING", txId, signature, depositAmount, transactionInfo.amount, 0.00001, 0);
         }
     };
 
@@ -135,9 +141,9 @@ app.use(express.json());
 app.use('/api', routes);
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello, world!');
+    res.send('Hello, world!');
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+    console.log(`Server is running on port ${port}`);
 });

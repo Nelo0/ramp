@@ -41,7 +41,7 @@ export const getSignaturesForAddress = async (address: string, rpcUrl: string) =
             "params": [
                 address,
                 {
-                    "limit": 2
+                    "limit": 5
                 }
             ]
         }),
@@ -132,3 +132,24 @@ export const getBalanceChange = (transactionResponse: any) => {
 
     return balanceChange
 }
+
+export const formartToUi = (amount: number, decimals: number) => {
+    const adjustedNumber = amount / Math.pow(10, decimals);
+
+    const formattedNumber = adjustedNumber.toFixed(decimals);
+
+    return formattedNumber;
+}
+
+export function convertAndRoundNumberToInteger(number: number): number {
+    // Step 1: Convert the integer representation to the actual decimal number
+    const actualNumber = number / 1000000;
+  
+    // Step 2: Round the number to 2 decimal places
+    const roundedNumber = Math.floor(actualNumber * 100) / 100;
+  
+    // Step 3: Convert the rounded decimal number back to an integer representation with 6 decimal places
+    const integerRepresentation = Math.floor(roundedNumber * 1000000);
+  
+    return integerRepresentation;
+  }

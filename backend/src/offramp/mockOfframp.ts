@@ -59,7 +59,6 @@ export const getMockOfframpInfo = async (depositAmount: number) => {
     return {
         transaction: transaction,
         computeUnits: null,
-        worstOutput: 1e6,
-        bestOutput: 1e6
+        amount: 1e6,
     } as TransactionInfo
 }

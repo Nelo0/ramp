@@ -23,3 +23,12 @@ export interface TransactionData {
 export type SignatureRow = {
     signature: string;
 };
+
+export interface User {
+    user_id: number;
+    email: string;
+    wallet_address: string;
+    created_at: Date;
+    iban: string;
+    bic: string;
+}

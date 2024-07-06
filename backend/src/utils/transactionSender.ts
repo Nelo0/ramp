@@ -4,8 +4,7 @@ import { delay, getTransaction } from "./utils.js";
 import { ASSOCIATED_TOKEN_PROGRAM_ID, Account, TOKEN_PROGRAM_ID, TokenAccountNotFoundError, TokenInvalidAccountOwnerError, TokenInvalidMintError, TokenInvalidOwnerError, createAssociatedTokenAccountInstruction, getAccount, getAssociatedTokenAddressSync } from "@solana/spl-token";
 
 export const sendTransactionLogic = async (tx: VersionedTransaction | Transaction) => {
-
-    const DELAY = 1_000;
+    const DELAY = 500;
     const MAX_WAIT = 60_000;
 
     let sx = ""
@@ -27,8 +26,7 @@ export const sendTransactionLogic = async (tx: VersionedTransaction | Transactio
                 console.log("Send transaction error: ", error)
             }
         }
-        let status;
-        status = await getTransaction(sx, SOLANA_RPC_ENDPOINT);
+        let status = await getTransaction(sx, SOLANA_RPC_ENDPOINT);
 
         //Transaction accepted
         if (status.result != null) {
