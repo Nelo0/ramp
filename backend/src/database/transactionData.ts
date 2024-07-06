@@ -17,7 +17,7 @@ JOIN
 WHERE 
     u.wallet_address = ${userAddress}
 ORDER BY 
-    t.time;
+    t.time DESC;
         `
 
         if (usersTxData == undefined) {
