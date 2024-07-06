@@ -17,7 +17,7 @@ JOIN
 WHERE 
     u.wallet_address = 'GgohWvPKDBDgDmkX17GrNMbmAiVy7wQVqx1yzLeG6VGf'
 ORDER BY 
-    t.time DESC;
+    t.time;
         `
 
         if (usersTxData == undefined) {
