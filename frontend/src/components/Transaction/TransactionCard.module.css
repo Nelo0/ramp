@@ -10,9 +10,22 @@
     flex-direction: column;
     overflow: hidden;
     border-width: 1.5px;
+    border-radius: var(--transaction-card-border-radius);
 }
 
-.transaction-card:hover {
+.card-base {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 50px;
+
+    padding: 25px 20px;
+    width: 100%;
+    border: 0px;
+    outline: 1.5px solid var(--placeholder-glass-stroke);
+}
+
+.card-base:hover {
     --overlay-color: rgba(255, 255, 255, 0.03);
     background-image: 
         url("/noise.png"),
@@ -38,20 +51,6 @@
     background-size: 17% auto, auto, auto, auto;
 }
 
-.card-base {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 50px;
-
-    padding: 25px 20px;
-    width: 100%;
-
-    border-radius: 12px;
-    border: 0px;
-    outline: 1.5px solid var(--placeholder-glass-stroke);
-}
-
 .currencies {
     display: flex;
     align-items: center;
@@ -66,11 +65,30 @@
 }
 
 .card-details {
-    padding: 20px 0px;
+    padding: 20px 20px;
 
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-column-gap: 100px;
     grid-row-gap: 10px;
     justify-items: left;
+}
+
+.transaction-hash {
+    display: flex;
+    gap: 4px;
+    justify-content: left;
+    align-items: center;
+}
+
+.hash-display {
+    margin-right: 8px;
+}
+
+.hash-button {
+    background: transparent;
+    border: 0px;
+    min-width: 31px;
+    height: 100%;
+    padding: 0px;
 }

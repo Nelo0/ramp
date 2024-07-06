@@ -16,5 +16,6 @@ export interface Transaction {
     iban: string;
     bic: string;
     transactionHash: string; // Change to Solana Hash type?
+    depositHash: string;
     status: Status;
 }

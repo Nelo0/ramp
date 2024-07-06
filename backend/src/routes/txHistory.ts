@@ -1,11 +1,15 @@
 import { Router, Request, Response } from 'express';
 import { getUsersTransactionsArray } from '../database/transactionData.js';
+import cors from 'cors';
 
 const txHistoryRouter = Router();
 
-txHistoryRouter.get('/', (req: Request, res: Response) => {
-    res.send('Transaction history is here');
-});
+const corsOptions = {
+    origin: 'http://localhost:3000', 
+    methods: 'POST',          
+    allowedHeaders: ["Content-Type"]
+};
+txHistoryRouter.use(cors(corsOptions));
 
 txHistoryRouter.post('/', async (req: Request, res: Response) => {
     try {

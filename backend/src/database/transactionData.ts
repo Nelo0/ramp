@@ -3,8 +3,6 @@ import { formartToUi } from "../utils/utils.js";
 import sql from "./supabase.js";
 
 export const getUsersTransactionsArray = async (userAddress: string) => {
-    console.log("getting user addresses: ")
-
     try {
         const usersTxData = await sql`
 SELECT 

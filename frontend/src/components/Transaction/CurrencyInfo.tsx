@@ -11,6 +11,7 @@ export default function CurrencyInfo({src, name, amount}: CurrencyInfoProps) {
     return (
         <div className={styles["currency-info"]}>
             <Image
+                className={styles["currency-icon"]}
                 src={src}
                 alt=""
                 height={36}
