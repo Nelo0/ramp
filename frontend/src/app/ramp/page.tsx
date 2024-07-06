@@ -22,23 +22,23 @@ export default function Ramp() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    //@ts-ignore
                     address: USER_WALLET
                 })
             };
             try {
                 response = await fetch(TRANSACTION_API_URL, options);
                 if (!response.ok) throw new Error(`HTTP status: ${response.status}`);
+                const data = await response.json();
+                setTransactions(data.result);
             } catch (error) {
                 console.error('Error:', error);
-                return;
             }
-            
-            const data = await response.json();
-             setTransactions(data.result)
         }
         getTransactions()
-    })
+
+        const intervalId = setInterval(getTransactions, 5000);
+        return () => clearInterval(intervalId);
+    }, [])
 
     return (
         <main>
