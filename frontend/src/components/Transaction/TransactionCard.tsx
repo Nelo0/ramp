@@ -20,12 +20,11 @@ export default function TransactionCard({transaction, dateLabelled} : Transactio
 
 
     // Formatted date/time strings
-    const timeObj = new Date(transaction.time);
-    const formattedDate = timeObj.toLocaleDateString("en-IE", {
+    const formattedDate = transaction.time.toLocaleDateString("en-IE", {
         month: "long",
         day: "numeric"
     });
-    const formattedTime = timeObj.toLocaleTimeString("en-IE", {
+    const formattedTime = transaction.time.toLocaleTimeString("en-IE", {
         hour: '2-digit',
         minute: '2-digit',
         hour12: false,
@@ -36,11 +35,11 @@ export default function TransactionCard({transaction, dateLabelled} : Transactio
     // Formatted date label
     const today = new Date();
     const yesterday = new Date();
-    yesterday.setDate(today.getDate()-1);
+    yesterday.setDate(today.getDate() - 1);
 
     let dateLabel = formattedDate;
-    if (timeObj.setHours(0,0,0,0) === today.setHours(0,0,0,0)) dateLabel = "Today";
-    else if (timeObj.setHours(0,0,0,0) === yesterday.setHours(0,0,0,0)) dateLabel = "Yesterday";
+    if (transaction.time.setHours(0,0,0,0) === today.setHours(0,0,0,0)) dateLabel = "Today";
+    else if (transaction.time.setHours(0,0,0,0) === yesterday.setHours(0,0,0,0)) dateLabel = "Yesterday";
 
 
     const inputTokenIcon = "/tokens/sol.jpg"; // TODO - Remove hardcoding

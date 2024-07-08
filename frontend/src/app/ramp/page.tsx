@@ -6,15 +6,17 @@ import OffRamp from "./OffRamp";
 import Transactions from "./Transactions";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Status, Transaction } from "@/model/Transaction";
 
 export default function Ramp() {
     const TRANSACTION_API_URL = "http://localhost:3001/api/txHistory";
     const USER_WALLET = "GgohWvPKDBDgDmkX17GrNMbmAiVy7wQVqx1yzLeG6VGf";
+    const TRANSACTION_REFRESH_SPEED = 5000;
     
-    const [transactions, setTransactions] = useState([]);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
 
     useEffect(() => {
-        const getTransactions = async () => {
+        const fetchTransactions = async () => {
             let response;
             const options: RequestInit = {
                 method: 'POST',
@@ -28,15 +30,23 @@ export default function Ramp() {
             try {
                 response = await fetch(TRANSACTION_API_URL, options);
                 if (!response.ok) throw new Error(`HTTP status: ${response.status}`);
+
                 const data = await response.json();
-                setTransactions(data.result);
+
+                setTransactions(
+                    data.result.map((transaction: any) => ({
+                        ...transaction,
+                        time: new Date(transaction.time),
+                        status: transaction.status as Status
+                    }))
+                );
             } catch (error) {
                 console.error('Error:', error);
             }
         }
-        getTransactions()
+        fetchTransactions();
 
-        const intervalId = setInterval(getTransactions, 5000);
+        const intervalId = setInterval(fetchTransactions, TRANSACTION_REFRESH_SPEED);
         return () => clearInterval(intervalId);
     }, [])
 

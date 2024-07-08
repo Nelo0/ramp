@@ -13,4 +13,5 @@ export default function TransactionStatus({status} : TransactionStatusProps) {
     if (status === Status.SUCCESS) return ( <p className={styles["success"]}>{success}</p> )
     if (status === Status.PROCESSING) return ( <p className={styles["processing"]}>{processing}</p> )
     if (status === Status.FAIL) return ( <p className={styles["fail"]}>{fail}</p> )
+    else throw new TypeError("Invalid status");
 }

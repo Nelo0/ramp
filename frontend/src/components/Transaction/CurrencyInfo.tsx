@@ -8,6 +8,12 @@ interface CurrencyInfoProps {
 }
 
 export default function CurrencyInfo({src, name, amount}: CurrencyInfoProps) {
+    const THRESHOLD = 7;
+
+    const amountStr = amount.toString();
+    const belowThreshold = amountStr.length <= THRESHOLD;
+    const displayAmount = belowThreshold ? amountStr : amountStr.slice(0,THRESHOLD) + "...";
+
     return (
         <div className={styles["currency-info"]}>
             <Image
@@ -20,7 +26,7 @@ export default function CurrencyInfo({src, name, amount}: CurrencyInfoProps) {
 
             <p className={styles["currency-name"]}>{name}</p>
 
-            <p className={"light"}>{amount}</p>
+            <p className={"light"}>{displayAmount}</p>
         </div>
     )
 }
