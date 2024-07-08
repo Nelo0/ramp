@@ -6,14 +6,24 @@ interface TransactionsProps {
     transactions: Transaction[]
 }
 
-export default function Transactions({transactions} : TransactionsProps) {
+export default function Transactions({transactions} : TransactionsProps) { 
+    let lastDate: Date | null = null;
     return (
         <div className={`glass ${styles["transactions"]}`}>
             <h2 className={styles["heading"]}>Transactions</h2>
             <ul className={styles["transactions-content"]}>
-                {transactions.map((transaction, index) => (
-                    <TransactionCard key={index} transaction={transaction} index={index}/>
-                ))}
+                {transactions.map((transaction, index) => {
+                    const isFirstOfDay = !lastDate || lastDate.setHours(0,0,0,0) !== transaction.time.setHours(0,0,0,0);
+                    lastDate = transaction.time;
+
+                    return (
+                        <TransactionCard
+                            key={index}
+                            transaction={transaction}
+                            dateLabelled={isFirstOfDay}
+                        />
+                    );
+                })}
             </ul>
         </div>
     )

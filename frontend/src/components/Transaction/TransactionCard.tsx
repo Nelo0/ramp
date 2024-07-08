@@ -8,17 +8,18 @@ import { hashToDisplayString } from "@/utils/solanaUtils";
 import Link from "next/link";
 
 interface TransactionCardProps {
-    key: number;
     transaction: Transaction;
-    index: number
+    dateLabelled: boolean;
 }
 
-export default function TransactionCard({transaction, index} : TransactionCardProps) {
+export default function TransactionCard({transaction, dateLabelled} : TransactionCardProps) {
     const [isOpen, setIsOpen] = useState(false);
 
     const transactionTypeText = transaction.offRamp ? "Off-ramp" : "On-ramp";
     const fiatPrefix = transaction.offRamp ? "Destination" : "Source";
 
+
+    // Formatted date/time strings
     const timeObj = new Date(transaction.time);
     const formattedDate = timeObj.toLocaleDateString("en-IE", {
         month: "long",
@@ -31,11 +32,27 @@ export default function TransactionCard({transaction, index} : TransactionCardPr
     });
     const formattedDateTime = `${formattedDate}, ${formattedTime}`;
 
+
+    // Formatted date label
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate()-1);
+
+    let dateLabel = formattedDate;
+    if (timeObj.setHours(0,0,0,0) === today.setHours(0,0,0,0)) dateLabel = "Today";
+    else if (timeObj.setHours(0,0,0,0) === yesterday.setHours(0,0,0,0)) dateLabel = "Yesterday";
+
+
     const inputTokenIcon = "/tokens/sol.jpg"; // TODO - Remove hardcoding
     const outputTokenIcon = "/euro.svg";
 
     return (
-        <li key={index} className={styles["transaction-card-wrapper"]}>
+        <li className={styles["transaction-card-wrapper"]}>
+            {dateLabelled && 
+                <div className={styles["date-label"]}>
+                    <small className="light">{dateLabel}</small>
+                </div>
+            }
             <div className={`glass ${styles["transaction-card"]}`}>
                 <button 
                     onClick={() => setIsOpen(!isOpen)} 
