@@ -35,9 +35,9 @@ export default function Ramp() {
             }
             
             const data = await response.json();
-             setTransactions(data.result)
+            setTransactions(data.result);
         }
-        getTransactions()
+        // getTransactions();
     })
 
     return (

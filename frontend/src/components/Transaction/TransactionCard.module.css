@@ -3,6 +3,10 @@
     width: 100%;
 }
 
+.date-label {
+    margin: 5px 0px 14px 0px;
+}
+
 .transaction-card {
     width: 100%;
     padding: 0px;
