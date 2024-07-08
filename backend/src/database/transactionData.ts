@@ -5,20 +5,20 @@ import sql from "./supabase.js";
 export const getUsersTransactionsArray = async (userAddress: string) => {
     try {
         const usersTxData = await sql`
-SELECT 
-    t.offramp, t.input_currency, t.output_currency, 
-    t.amount_input_currency, t.amount_output_currency, t.time, 
-    t.gas_fee_euro, t.transaction_fee_euro, t.iban, t.bic, 
-    t.transaction_hash, t.deposit_hash, t.status
-FROM 
-    transaction_data t
-JOIN 
-    users u ON t.user_id = u.user_id
-WHERE 
-    u.wallet_address = ${userAddress}
-ORDER BY 
-    t.time DESC;
-        `
+            SELECT 
+                t.offramp, t.input_currency, t.output_currency, 
+                t.amount_input_currency, t.amount_output_currency, t.time, 
+                t.gas_fee_euro, t.transaction_fee_euro, t.iban, t.bic, 
+                t.transaction_hash, t.deposit_hash, t.status
+            FROM 
+                transaction_data t
+            JOIN 
+                users u ON t.user_id = u.user_id
+            WHERE 
+                u.wallet_address = ${userAddress}
+            ORDER BY 
+                t.time DESC;
+        `;
 
         if (usersTxData == undefined) {
             throw Error("Database call to get user transactions data retuned undefined")
@@ -43,7 +43,7 @@ ORDER BY
 
     } catch (error) {
         console.log("error getting user transactions data: ", error)
-        throw Error("Error getting the user transactions data")
+        throw Error("Error getting the user transactions data")  // TODO - Fix throwing an error in a catch block?
     }
 }
 

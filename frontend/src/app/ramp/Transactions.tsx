@@ -13,8 +13,8 @@ export default function Transactions({transactions} : TransactionsProps) {
             <h2 className={styles["heading"]}>Transactions</h2>
             <ul className={styles["transactions-content"]}>
                 {transactions.map((transaction, index) => {
-                    let isFirstOfDay = !lastDate || lastDate.setHours(0,0,0,0) !== transaction.time.setHours(0,0,0,0);
-                    lastDate = transaction.time;
+                    let isFirstOfDay = !lastDate || lastDate.setHours(0,0,0,0) !== new Date(transaction.time).setHours(0,0,0,0);
+                    lastDate = new Date(transaction.time);
 
                     return (
                         <TransactionCard

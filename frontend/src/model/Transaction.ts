@@ -6,16 +6,16 @@ export enum Status {
 
 export interface Transaction {
     offRamp: boolean;
-    inputCurrency: string; // Change to Token type?
+    inputCurrency: string; // TODO - Change to Token type?
     outputCurrency: string;
     amountInputCurrency: number;
     amountOutputCurrency: number;
-    time: Date;
+    time: string; // TODO - Change to Date type
     gasFeeEuro: number;
     transactionFeeEuro: number;
     iban: string;
     bic: string;
-    transactionHash: string; // Change to Solana Hash type?
+    transactionHash: string; // TODO - Change to Solana Hash type?
     depositHash: string;
     status: Status;
 }

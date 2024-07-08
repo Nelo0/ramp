@@ -33,13 +33,16 @@ export default function Ramp() {
 
                 const data = await response.json();
 
-                setTransactions(
-                    data.result.map((transaction: any) => ({
+                const transactionObjs: Transaction[] = data.result.map((transaction: any) => {
+                    return {
                         ...transaction,
-                        time: new Date(transaction.time),
+                        // time: new Date(transaction.time),
                         status: transaction.status as Status
-                    }))
-                );
+                    };
+                });
+                console.log(transactionObjs[0]);
+
+                setTransactions(transactionObjs);
             } catch (error) {
                 console.error('Error:', error);
             }

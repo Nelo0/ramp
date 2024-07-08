@@ -18,13 +18,13 @@ export default function TransactionCard({transaction, dateLabelled} : Transactio
     const transactionTypeText = transaction.offRamp ? "Off-ramp" : "On-ramp";
     const fiatPrefix = transaction.offRamp ? "Destination" : "Source";
 
-
     // Formatted date/time strings
-    const formattedDate = transaction.time.toLocaleDateString("en-IE", {
+    const timeObj = new Date(transaction.time);
+    const formattedDate = timeObj.toLocaleDateString("en-IE", {
         month: "long",
         day: "numeric"
     });
-    const formattedTime = transaction.time.toLocaleTimeString("en-IE", {
+    const formattedTime = timeObj.toLocaleTimeString("en-IE", {
         hour: '2-digit',
         minute: '2-digit',
         hour12: false,
@@ -38,8 +38,8 @@ export default function TransactionCard({transaction, dateLabelled} : Transactio
     yesterday.setDate(today.getDate() - 1);
 
     let dateLabel = formattedDate;
-    if (transaction.time.setHours(0,0,0,0) === today.setHours(0,0,0,0)) dateLabel = "Today";
-    else if (transaction.time.setHours(0,0,0,0) === yesterday.setHours(0,0,0,0)) dateLabel = "Yesterday";
+    if (timeObj.setHours(0,0,0,0) === today.setHours(0,0,0,0)) dateLabel = "Today";
+    else if (timeObj.setHours(0,0,0,0) === yesterday.setHours(0,0,0,0)) dateLabel = "Yesterday";
 
 
     const inputTokenIcon = "/tokens/sol.jpg"; // TODO - Remove hardcoding
