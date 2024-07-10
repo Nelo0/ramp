@@ -30,7 +30,7 @@ const getEuroeApiToken = async () => {
 }
 
 
-const createBurnInstruction = async (token: string, amount: number) => {
+const createBurnInstruction = async (token: string, amount: string) => {
     const url = 'https://accountapi.euroe.com/api/burn';
     const payload = {
         amount: `${amount}`,
@@ -109,7 +109,7 @@ const cancelPaymentInstruction = async (token: string, instructionId: string) =>
     }
 }
 
-export const initiateEuroeBurn = async (amount: number) => {
+export const initiateEuroeBurn = async (amount: string) => {
     let bearerToken = await getEuroeApiToken()
 
     if (bearerToken == "") {
@@ -150,4 +150,4 @@ const getAllMintAndBurns = async (token: string) => {
     } catch (error) {
         console.error('Error:', error);
     }
-} 
+}
