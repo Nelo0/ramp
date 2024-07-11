@@ -1,5 +1,6 @@
 import Image from "next/image";
 import styles from "./CurrencyInfo.module.css";
+import { shortenCurrenyDisplay } from "@/utils/uiUtils";
 
 interface CurrencyInfoProps {
     src: string;
@@ -8,11 +9,10 @@ interface CurrencyInfoProps {
 }
 
 export default function CurrencyInfo({src, name, amount}: CurrencyInfoProps) {
-    const THRESHOLD = 7;
+    const THRESHOLD = 10;
 
-    const amountStr = amount.toString();
-    const belowThreshold = amountStr.length <= THRESHOLD;
-    const displayAmount = belowThreshold ? amountStr : amountStr.slice(0,THRESHOLD) + "...";
+    const isEuro = (name == "EUR");
+    const displayAmount = shortenCurrenyDisplay(amount, THRESHOLD, isEuro);
 
     return (
         <div className={styles["currency-info"]}>
