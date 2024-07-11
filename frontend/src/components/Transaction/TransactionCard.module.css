@@ -21,7 +21,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 50px;
+    gap: 0px;
 
     padding: 25px 20px;
     width: 100%;
@@ -56,16 +56,20 @@
 }
 
 .currencies {
-    display: flex;
-    align-items: center;
+    flex-grow: 1;
 
-    gap: 25px;
+    display: grid;
+    grid-template-columns: 4.5fr 1fr 4.5fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    justify-items: left;
+    align-items: center;
 }
 
 .basic-info {
     display: flex;
-    align-items: center;
-    gap: 50px;
+    align-items: right;
+    gap: 25px;
 }
 
 .card-details {

@@ -42,6 +42,10 @@ export default function TransactionCard({transaction, dateLabelled} : Transactio
     else if (timeObj.setHours(0,0,0,0) === yesterday.setHours(0,0,0,0)) dateLabel = "Yesterday";
 
 
+    // Format € symbol
+    const isInputEuro = transaction.inputCurrency == "EUR"; // TODO - Change to a "Token" class
+    const isOutputEuro = transaction.outputCurrency == "EUR"; // TODO - Change to a "Token" class
+
     const inputTokenIcon = "/tokens/sol.jpg"; // TODO - Remove hardcoding
     const outputTokenIcon = "/euro.svg";
 
@@ -71,7 +75,7 @@ export default function TransactionCard({transaction, dateLabelled} : Transactio
                     </div>
 
                     <div className={styles["basic-info"]}>
-                        <p className={"light"}>{formattedTime}</p>
+                        <p>{formattedTime}</p>
                         
                         <TransactionStatus status={transaction.status}/>
                     </div>
@@ -81,10 +85,12 @@ export default function TransactionCard({transaction, dateLabelled} : Transactio
                     <div className={styles["card-details"]}>
                         <p className="light">Transaction type</p> <p>{transactionTypeText}</p>
                         <p className="light">Created on</p> <p>{formattedDateTime}</p>
-                        <p className="light">{fiatPrefix} IBAN</p> <p>{transaction.iban}</p>
-                        <p className="light">{fiatPrefix} BIC</p> <p>{transaction.bic}</p>
+                        <p className="light">{transaction.inputCurrency} sent</p> <p>{isInputEuro && "€"}{transaction.amountInputCurrency}</p>
+                        <p className="light">{transaction.outputCurrency} received</p> <p>{isOutputEuro && "€"}{transaction.amountOutputCurrency}</p>
                         <p className="light">Solana gas fee</p> <p>~€{transaction.gasFeeEuro}</p>
                         <p className="light">Transaction fee</p> <p>€{transaction.transactionFeeEuro} <span className="light">(0.5%)</span></p>
+                        <p className="light">{fiatPrefix} IBAN</p> <p>{transaction.iban}</p>
+                        <p className="light">{fiatPrefix} BIC</p> <p>{transaction.bic}</p>
                         <p className="light">Transaction hash</p>
                         <div className={styles["transaction-hash"]}>
                             <p className={styles["hash-display"]}>{hashToDisplayString(transaction.transactionHash)}</p>

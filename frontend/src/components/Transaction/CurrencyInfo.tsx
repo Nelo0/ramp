@@ -24,9 +24,9 @@ export default function CurrencyInfo({src, name, amount}: CurrencyInfoProps) {
                 width={36}
             />
 
-            <p className={styles["currency-name"]}>{name}</p>
+            <p className={styles["currency-amount"]}>{displayAmount}</p>
 
-            <p className={"light"}>{displayAmount}</p>
+            <p className={"light"}>{name}</p>
         </div>
     )
 }
