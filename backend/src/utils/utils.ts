@@ -1,6 +1,7 @@
 import { Keypair, PublicKey } from "@solana/web3.js";
 import { connection, quartzKeypair } from "./enviroment.js";
 import { ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction, createMint, getAssociatedTokenAddressSync } from "@solana/spl-token";
+import * as BN from 'bignumber.js';
 
 export const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -14,14 +15,14 @@ export const convertDecimalPlaces = (amount: number, currentDecimalPlaces: numbe
     return amount * factor;
 }
 
-export const formatAmountForEuroe = (originalNumber: number) => {
-    const decimalNumber = originalNumber * 1e-6;
+export const formatAmountForEuroe = (originalNumber: number): string => {
+    const decimalNumber = new BN.BigNumber(originalNumber).multipliedBy(1e-6);
     
-    const roundedDownDecimal = Math.floor(decimalNumber * 100) / 100;
-    
-    const roundedDown18point = roundedDownDecimal * 1e18;
-    
-    return roundedDown18point;
+    const roundedDownDecimal = decimalNumber.decimalPlaces(2, BN.BigNumber.ROUND_DOWN);
+
+    const scaledUpNumber = roundedDownDecimal.multipliedBy(1e18);
+
+    return scaledUpNumber.toFixed(0); 
 }
 
 export const getSignaturesForAddress = async (address: string, rpcUrl: string) => {

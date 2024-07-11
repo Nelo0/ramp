@@ -1,7 +1,7 @@
 import WebSocket from "ws";
 import { getBalanceChange, getSignaturesForAddress, getTransaction } from "./utils/utils.js";
 import { TransactionInfo, getSwapIntructions as getSwapTransactionInfo } from "./offramp/swap.js";
-import { ENV, SOLANA_RPC_ENDPOINT, SOLANA_WS_ENDPOINT, connection, quartzKeypair } from "./utils/enviroment.js";
+import { ENV, SOLANA_RPC_ENDPOINT, SOLANA_WS_ENDPOINT, quartzKeypair } from "./utils/enviroment.js";
 import { filterProcessedSignaturesNew } from "./utils/processing.js";
 import { sendTransactionLogic } from "./utils/transactionSender.js";
 import { returnFunds } from "./offramp/returnFunds.js";
@@ -23,19 +23,7 @@ export const openHeliusWs = () => {
     console.log("Quartz Deposit Address:", quartzDepositAddress)
     heliusSocket.onopen = () => {
         console.log('WebSocket is open');
-        const request = {
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "accountSubscribe",
-            "params": [
-                `${quartzDepositAddress}`,
-                {
-                    "encoding": "jsonParsed",
-                    "commitment": "finalized"
-                }
-            ]
-        }
-        heliusSocket.send(JSON.stringify(request));
+        sendWebsocketRequest(heliusSocket);
     }
 
     heliusSocket.onmessage = async ({ data }: any) => {
@@ -137,6 +125,10 @@ export const openHeliusWs = () => {
 
 let socket = openHeliusWs();
 
+setInterval(() => {
+    sendWebsocketRequest(socket)
+}, 80000);
+
 app.use(express.json());
 app.use('/api', routes);
 
@@ -147,3 +139,21 @@ app.get('/', (req: Request, res: Response) => {
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
+const sendWebsocketRequest = async (socket: WebSocket) => {
+    const quartzDepositAddress = quartzKeypair.publicKey.toBase58()
+
+    const request = JSON.stringify({
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "accountSubscribe",
+        "params": [
+            `${quartzDepositAddress}`,
+            {
+                "encoding": "jsonParsed",
+                "commitment": "finalized"
+            }
+        ]
+    })
+    socket.send(request)
+}
