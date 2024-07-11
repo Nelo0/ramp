@@ -36,7 +36,7 @@ export default function Ramp() {
                 const transactionObjs: Transaction[] = data.result.map((transaction: any) => {
                     return {
                         ...transaction,
-                        // time: new Date(transaction.time),
+                        // time: new Date(transaction.time),  // TODO - Convert to date object
                         status: transaction.status as Status
                     };
                 });
