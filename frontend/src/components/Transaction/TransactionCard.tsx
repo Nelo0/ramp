@@ -80,44 +80,42 @@ export default function TransactionCard({transaction, dateLabelled} : Transactio
                         <TransactionStatus status={transaction.status}/>
                     </div>
                 </button>
-
-                {isOpen &&
-                    <div className={styles["card-details"]}>
-                        <p className="light">Transaction type</p> <p>{transactionTypeText}</p>
-                        <p className="light">Created on</p> <p>{formattedDateTime}</p>
-                        <p className="light">{transaction.inputCurrency} sent</p> <p>{isInputEuro && "€"}{transaction.amountInputCurrency}</p>
-                        <p className="light">{transaction.outputCurrency} received</p> <p>{isOutputEuro && "€"}{transaction.amountOutputCurrency}</p>
-                        <p className="light">Solana gas fee</p> <p>~€{transaction.gasFeeEuro}</p>
-                        <p className="light">Transaction fee</p> <p>€{transaction.transactionFeeEuro} <span className="light">(0.5%)</span></p>
-                        <p className="light">{fiatPrefix} IBAN</p> <p>{transaction.iban}</p>
-                        <p className="light">{fiatPrefix} BIC</p> <p>{transaction.bic}</p>
-                        <p className="light">Transaction hash</p>
-                        <div className={styles["transaction-hash"]}>
-                            <p className={styles["hash-display"]}>{hashToDisplayString(transaction.transactionHash)}</p>
-                            <button 
-                                className={styles["hash-button"]}
-                                onClick={() => navigator.clipboard.writeText(transaction.transactionHash)}
-                            >
+                
+                <div className={`${styles["card-details"]} ${isOpen && styles["open"]}`}>
+                    <p className="light">Transaction type</p> <p>{transactionTypeText}</p>
+                    <p className="light">Created on</p> <p>{formattedDateTime}</p>
+                    <p className="light">{transaction.inputCurrency} sent</p> <p>{isInputEuro && "€"}{transaction.amountInputCurrency}</p>
+                    <p className="light">{transaction.outputCurrency} received</p> <p>{isOutputEuro && "€"}{transaction.amountOutputCurrency}</p>
+                    <p className="light">Solana gas fee</p> <p>~€{transaction.gasFeeEuro}</p>
+                    <p className="light">Transaction fee</p> <p>€{transaction.transactionFeeEuro} <span className="light">(0.5%)</span></p>
+                    <p className="light">{fiatPrefix} IBAN</p> <p>{transaction.iban}</p>
+                    <p className="light">{fiatPrefix} BIC</p> <p>{transaction.bic}</p>
+                    <p className="light">Transaction hash</p>
+                    <div className={styles["transaction-hash"]}>
+                        <p className={styles["hash-display"]}>{hashToDisplayString(transaction.transactionHash)}</p>
+                        <button 
+                            className={styles["hash-button"]}
+                            onClick={() => navigator.clipboard.writeText(transaction.transactionHash)}
+                        >
+                            <Image
+                                src="/copy_white.svg"
+                                alt="Copy"
+                                height={17}
+                                width={17}
+                            />
+                        </button>
+                        <a target="blank_" href={"https://solana.fm/tx/" + transaction.transactionHash}>
+                            <button className={styles["hash-button"]}>
                                 <Image
-                                    src="/copy_white.svg"
-                                    alt="Copy"
-                                    height={17}
-                                    width={17}
+                                    src="/open_link.svg"
+                                    alt="Open in explorer"
+                                    height={15}
+                                    width={15}
                                 />
                             </button>
-                            <a target="blank_" href={"https://solana.fm/tx/" + transaction.transactionHash}>
-                                <button className={styles["hash-button"]}>
-                                    <Image
-                                        src="/open_link.svg"
-                                        alt="Open in explorer"
-                                        height={15}
-                                        width={15}
-                                    />
-                                </button>
-                            </a>
-                        </div>
+                        </a>
                     </div>
-                }
+                </div>
             </div>
         </li>
     )
