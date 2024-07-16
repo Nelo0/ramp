@@ -3,7 +3,7 @@ import styles from "./TransactionCard.module.css";
 import { Transaction } from "@/model/Transaction";
 import CurrencyInfo from "./CurrencyInfo";
 import TransactionStatus from "./TransactionStatus";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { hashToDisplayString } from "@/utils/solanaUtils";
 import Link from "next/link";
 
@@ -14,6 +14,7 @@ interface TransactionCardProps {
 
 export default function TransactionCard({transaction, dateLabelled} : TransactionCardProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const detailsRef = useRef<HTMLDivElement>(null);
 
     const transactionTypeText = transaction.offRamp ? "Off-ramp" : "On-ramp";
     const fiatPrefix = transaction.offRamp ? "Destination" : "Source";
@@ -49,6 +50,22 @@ export default function TransactionCard({transaction, dateLabelled} : Transactio
     const inputTokenIcon = "/tokens/sol.jpg"; // TODO - Remove hardcoding
     const outputTokenIcon = "/euro.svg";
 
+
+    // Handle opening and closing transaction details
+    const PADDING_VERTICLE = 20;
+    const PADDING_HORIZONTAL = 20;
+    useEffect(() => {
+        if (detailsRef.current) {
+            if (isOpen) {
+                detailsRef.current.style.maxHeight = `${detailsRef.current.scrollHeight + (PADDING_VERTICLE*2)}px`;
+                detailsRef.current.style.padding = `${PADDING_VERTICLE}px ${PADDING_HORIZONTAL}px`;
+            } else {
+                detailsRef.current.style.maxHeight = '0px';
+                detailsRef.current.style.padding = `0px ${PADDING_HORIZONTAL}px`;
+            }
+        }
+    }, [isOpen]);
+
     return (
         <li className={styles["transaction-card-wrapper"]}>
             {dateLabelled && 
@@ -81,7 +98,7 @@ export default function TransactionCard({transaction, dateLabelled} : Transactio
                     </div>
                 </button>
                 
-                <div className={`${styles["card-details"]} ${isOpen && styles["open"]}`}>
+                <div ref={detailsRef} className={`${styles["card-details"]} ${isOpen && styles["open"]}`}>
                     <p className="light">Transaction type</p> <p>{transactionTypeText}</p>
                     <p className="light">Created on</p> <p>{formattedDateTime}</p>
                     <p className="light">{transaction.inputCurrency} sent</p> <p>{isInputEuro && "€"}{transaction.amountInputCurrency}</p>

@@ -79,15 +79,12 @@
     grid-row-gap: 10px;
     justify-items: left;
 
-    padding: 0px 20px;
-    max-height: 0px;
     overflow: hidden;
-    transition: max-height 0.3s linear, padding 0.3s linear;
+    transition: max-height 0.15s ease-in, padding 0.15s ease-in;
 }
 
 .card-details.open {
-    max-height: 1000px;
-    padding: 20px 20px;
+    transition: max-height 0.15s ease-out, padding 0.15s ease-out;
 }
 
 .transaction-hash {

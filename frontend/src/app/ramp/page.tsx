@@ -15,42 +15,41 @@ export default function Ramp() {
     
     const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-    useEffect(() => {
-        const fetchTransactions = async () => {
-            let response;
-            const options: RequestInit = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    address: USER_WALLET
-                })
-            };
-            try {
-                response = await fetch(TRANSACTION_API_URL, options);
-                if (!response.ok) throw new Error(`HTTP status: ${response.status}`);
+    const fetchTransactions = async () => {
+        let response;
+        const options: RequestInit = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                address: USER_WALLET
+            })
+        };
+        try {
+            response = await fetch(TRANSACTION_API_URL, options);
+            if (!response.ok) throw new Error(`HTTP status: ${response.status}`);
 
-                const data = await response.json();
+            const data = await response.json();
 
-                const transactionObjs: Transaction[] = data.result.map((transaction: any) => {
-                    return {
-                        ...transaction,
-                        // time: new Date(transaction.time),  // TODO - Convert to date object
-                        status: transaction.status as Status
-                    };
-                });
-                console.log(transactionObjs[0]);
+            const transactionObjs: Transaction[] = data.result.map((transaction: any) => {
+                return {
+                    ...transaction,
+                    // time: new Date(transaction.time),  // TODO - Convert to date object
+                    status: transaction.status as Status
+                };
+            });
+            console.log(transactionObjs[0]);
 
-                setTransactions(transactionObjs);
-            } catch (error) {
-                console.error('Error:', error);
-            }
+            setTransactions(transactionObjs);
+        } catch (error) {
+            console.error('Error:', error);
         }
+    }
+    useEffect(() => {
         fetchTransactions();
-
-        const intervalId = setInterval(fetchTransactions, TRANSACTION_REFRESH_SPEED);
-        return () => clearInterval(intervalId);
+        // const intervalId = setInterval(fetchTransactions, TRANSACTION_REFRESH_SPEED);
+        // return () => clearInterval(intervalId);
     }, [])
 
     return (
