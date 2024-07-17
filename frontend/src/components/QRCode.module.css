@@ -1,6 +1,6 @@
 .qr-container {
     margin-top: 56px;
-    margin-bottom: 79px;
+    margin-bottom: auto;
     border-radius: 14px;
     overflow: hidden;
 }
