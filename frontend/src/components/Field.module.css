@@ -7,7 +7,7 @@
     width: 425px;
 
     background: var(--color-background);
-    padding: 14px;
+    padding: 12px;
     border-radius: 14px;
     border: 1px solid var(--placeholder-glass-stroke);
 
@@ -34,7 +34,7 @@
 }
 
 .field.large{
-    padding: 24px;
+    padding: 20px 24px;
     border-radius: 24px;
 }
 

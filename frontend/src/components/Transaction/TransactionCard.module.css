@@ -15,6 +15,8 @@
     overflow: hidden;
     border-width: 1.5px;
     border-radius: var(--transaction-card-border-radius);
+
+    backdrop-filter: blur(30px);
 }
 
 .card-base {

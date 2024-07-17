@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --max-width: 650px;
+  --max-width: 620px;
 
   --color-text: #FFFFFF;
   --color-text-light: #FFFFFFD9;
@@ -21,12 +21,12 @@
     linear-gradient(65deg, rgba(188,188,188,0.12) 0%, rgba(235,235,235,0.25) 100%);
   --placeholder-glass-stroke: #4E677D;
 
-  --size-h1: 53.57px;
-  --size-h2: 44.79px;
-  --size-h3: 31.1px;
-  --size-h4: 25.92px;
-  --size-p: 18px;
-  --size-s: 15px;
+  --size-h1: 50px;
+  --size-h2: 41.8px;
+  --size-h3: 29.03px;
+  --size-h4: 24.19px;
+  --size-p: 16.8px;
+  --size-s: 14px;
 
   --font-weight: 300;
 
@@ -93,14 +93,14 @@ button {
   box-shadow: -10px 10px 24px 0px rgba(41,135,200,0.12);
   
   /* Glass Blur */
-  backdrop-filter: blur(25px);
+  backdrop-filter: blur(18px);
 
   /* Background */
   background-image: 
     url("/noise.png"),
     radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%),
     linear-gradient(#ffffff03, #ffffff03),
-    linear-gradient(#0B111D80, #0B111D80);
+    linear-gradient(#0B111D66, #0B111D66);
   background-size: 17% auto, auto, auto, auto;
 
   /* Border - TODO: Make gradient */
