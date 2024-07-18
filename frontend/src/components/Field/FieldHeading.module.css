@@ -1,0 +1,11 @@
+.field-heading {
+    text-align: left;
+    width: var(--field-width);
+
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 8px;
+
+    padding-left: 3px;
+}

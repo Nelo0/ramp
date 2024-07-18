@@ -1,6 +1,6 @@
 .main-panel {
     width: var(--max-width);
-    height: 750px;
+    height: 84VH;
 
     display: flex;
     flex-direction: column;

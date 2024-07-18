@@ -1,10 +1,7 @@
-.field-wrapper {
-    text-align: left;
-}
-
 .field {
+    text-align: left;
     margin-top: 6px;
-    width: 425px;
+    width: var(--field-width);
 
     background: var(--color-background);
     padding: 12px;

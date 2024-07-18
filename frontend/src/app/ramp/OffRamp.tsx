@@ -1,10 +1,12 @@
 import QRCode from "@/components/QRCode";
 import styles from "./page.module.css";
-import Field from "@/components/Field";
+import Field from "@/components/Field/Field";
 import MainPanel from "@/components/MainPanel";
 import Image from "next/image";
 import { useState } from "react";
 import { hashToDisplayString } from "@/utils/solanaUtils";
+import FieldHeading from "@/components/Field/FieldHeading";
+import Tooltip from "@/components/Tooltip";
 
 export default function OffRamp() {
     // TODO -> keep this constants somewhere better
@@ -26,8 +28,20 @@ export default function OffRamp() {
 
             <QRCode address={ADDRESS_WALLET}/>
 
-            <Field heading={addressHeading} copyText={addressCopy} large={true}>
-                <p>{addressDisplay}</p>
+            <FieldHeading heading={addressHeading}>
+                {useSNS && 
+                    <Tooltip src={"/tooltip_help.svg"} alt={"?"}>
+                        <small>
+                            <a href="https://www.sns.id/" target="_blank">Solana Name Service</a> is a way to represent wallet addresses as easy-to-remember domains. “quartzpay.sol” is our SNS domain.
+                        </small>
+                    </Tooltip>
+                }
+            </FieldHeading>
+
+            <Field copyText={addressCopy} large={true}>
+                <div className={styles["sns-tooltip"]}>
+                    <p>{addressDisplay}</p>
+                </div>
                 <Image
                     src="/copy.svg"
                     alt="Copy"

@@ -11,7 +11,7 @@ export default function QRCode({address}: QRCodeProps) {
     return (
         <div className={styles["qr-container"]}>
             <Image
-                src="/qr-placeholder.jpg"
+                src="/qr_placeholder.jpg"
                 alt="QR code version of wallet address"
                 height={250}
                 width={250}
