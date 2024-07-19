@@ -5,18 +5,20 @@
     gap: 18px;
 }
 
-.ramps {
+.nav-section {
     display: flex;
     align-items: center;
     justify-content: space-between;
 
+    height: var(--nav-height);
     background: var(--color-background);
+
+    border-radius: 20px;
+    border: 1px solid var(--placeholder-glass-stroke);
 }
 
 .account {
     padding: 19px;
-    background: var(--color-background);
-    height: var(--nav-height);
 }
 
 .account img {
@@ -24,23 +26,45 @@
     width: 32px;
 }
 
-.account.active {   
-
-}
-
 .ramp-button {
-    padding: 20px 54px;
-    height: var(--nav-height);
+    padding: 0px 54px;
+    height: 100%;
+
+    border-radius: inherit;
+    background: var(--color-background);
+    border: 0px;
 }
 
 .ramp-button p {
     font-size: 24.2px;
 }
 
-.ramp-button.active {
-
+.active {
+    background: var(--gradient-glass-stroke);
 }
 
-.ramp-button.active p {
+.active:hover {
+    background:
+        var(--overlay),
+        var(--gradient-glass-stroke);
+}
 
+.active:active {
+    background:
+        var(--overlay),
+        var(--overlay),
+        var(--gradient-glass-stroke);
+}
+
+.inactive:hover{
+    background: 
+        var(--overlay),
+        var(--background-linear-gradient);
+}
+
+.inactive:active {
+    background: 
+        var(--overlay),
+        var(--overlay),
+        var(--background-linear-gradient);
 }

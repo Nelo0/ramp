@@ -18,15 +18,15 @@ export default function NavBar({selected}: NavBarProps) {
 
     return (
         <div className={styles["nav"]}>
-            <div className={styles["ramps"]}>
-                <div className={`${styles["ramp-button"]} ${offRamp ? "active" : ""}`}>
+            <div className={styles["nav-section"]}>
+                <button className={`${styles["ramp-button"]} ${offRamp ? styles["active"] : styles["inactive"]}`}>
                     <p>Off-ramp</p>
-                </div>
-                <div className={`${styles["ramp-button"]} ${onRamp ? "active" : ""}`}>
+                </button>
+                <button className={`${styles["ramp-button"]} ${onRamp ? styles["active"] : styles["inactive"]}`}>
                     <p>On-ramp</p>
-                </div>
+                </button>
             </div>
-            <div className={`${styles["account"]} ${account ? "active" : ""}`}>
+            <button className={`${styles["nav-section"]} ${styles["account"]} ${account ? styles["active"] : styles["inactive"]}`}>
                 {!account &&
                     <Image
                         src="profile.svg"
@@ -43,7 +43,7 @@ export default function NavBar({selected}: NavBarProps) {
                         width={0}
                     />
                 }
-            </div>
+            </button>
         </div>
     )
 }

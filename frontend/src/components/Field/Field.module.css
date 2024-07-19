@@ -15,14 +15,16 @@
 }
 
 .field:hover {
-    --overlay-color: rgba(255, 255, 255, 0.03);
-    background:
-        linear-gradient(var(--overlay-color), var(--overlay-color)),
-        linear-gradient(var(--color-background), var(--color-background));
+    background: 
+        var(--overlay), 
+        var(--background-linear-gradient);
 }
 
 .field:active {
-    background: var(--color-background-shade);
+    background: 
+        var(--overlay),
+        var(--overlay),
+        var(--background-linear-gradient);
 }
 
 .field img{
