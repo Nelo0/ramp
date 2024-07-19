@@ -6,6 +6,7 @@
   /* Breakpoint 0 - 1130px */
   /* Breakpoint 1 - 1030px */
   /* Breakpoint 2 - 680px */
+  /* Breakpoint 3 - 475px */
 
   --max-width: 620px;
 
@@ -32,12 +33,19 @@
 
   --background-linear-gradient: linear-gradient(var(--color-background), var(--color-background));
 
-  --size-h1: 50px;
-  --size-h2: 41.8px;
-  --size-h3: 29.03px;
-  --size-h4: 24.19px;
-  --size-p: 16.8px;
-  --size-s: 14px;
+  --size-h1-base: 50px;
+  --size-h2-base: 41.8px;
+  --size-h3-base: 29.03px;
+  --size-h4-base: 24.19px;
+  --size-p-base: 16.8px;
+  --size-s-base: 14px;
+
+  --size-h1: var(--size-h1-base);
+  --size-h2: var(--size-h2-base);
+  --size-h3: var(--size-h3-base);
+  --size-h4: var(--size-h4-base);
+  --size-p: var(--size-p-base);
+  --size-s: var(--size-s-base);
 
   --font-weight: 300;
 
@@ -49,14 +57,27 @@
 
 @media only screen and (max-width: 1030px) {
   :root {
-    --size-h1: 45px;
-    --size-h2: 37.62px;
-    --size-h3: 26.13px;
-    --size-h4: 21.77px;
-    --size-p: 15.12px;
-    --size-s: 12.6px;
+    --size-h1: calc(0.9 * var(--size-h1-base));
+    --size-h2: calc(0.9 * var(--size-h2-base));
+    --size-h3: calc(0.9 * var(--size-h3-base));
+    --size-h4: calc(0.9 * var(--size-h4-base));
+    --size-s: calc(0.9 * var(--size-s-base));
+    --size-p: calc(0.9 * var(--size-p-base));
 
     --nav-height: 65px;
+  }
+}
+
+@media only screen and (max-width: 680px) {
+  :root {
+    --size-h1: calc(0.8 * var(--size-h1-base));
+    --size-h2: calc(0.8 * var(--size-h2-base));
+    --size-h3: calc(0.8 * var(--size-h3-base));
+    --size-h4: calc(0.8 * var(--size-h4-base));
+    --size-s: calc(0.8 * var(--size-s-base));
+    --size-p: calc(0.8 * var(--size-p-base));
+
+    --nav-height: 60px;
   }
 }
 

@@ -69,7 +69,7 @@ export default function Ramp() {
                     />
                 </a>
                 <div className={styles["nav-links"]}>
-                    <p>foo</p>
+                    {/* TODO - Add links to Scout, Card */}
                 </div>
             </div>
             

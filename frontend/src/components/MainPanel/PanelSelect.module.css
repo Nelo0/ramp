@@ -3,6 +3,14 @@
     align-items: center;
     justify-content: space-between;
     gap: 18px;
+
+    text-wrap: nowrap;
+}
+
+@media only screen and (max-width: 680px) {
+    .nav { 
+        gap: 8px;
+    }
 }
 
 .nav-section {
@@ -18,12 +26,14 @@
 }
 
 .account {
-    padding: 19px;
+    width: var(--nav-height);
+    justify-content: center;
+    padding: 0px;
 }
 
 .account img {
-    height: 32px;
-    width: 32px;
+    width: 40%;
+    height: auto;
 }
 
 .ramp-button {
@@ -35,8 +45,14 @@
     border: 0px;
 }
 
+@media only screen and (max-width: 680px) {
+    .ramp-button { 
+        padding: 0px 44px;
+    }
+}
+
 .ramp-button p {
-    font-size: 24.2px;
+    font-size: var(--size-h4);
 }
 
 .active {

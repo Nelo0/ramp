@@ -26,6 +26,12 @@
     }
 }
 
+@media only screen and (max-width: 680px) {
+    .nav {
+        width: 95%;
+    }
+}
+
 .nav-links {
     display: flex;
     align-items: center;
