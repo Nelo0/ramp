@@ -1,14 +1,14 @@
-import MainPanel from "@/components/MainPanel";
-import NavBar, { NavBarRoute } from "@/components/NavBar";
+import MainPanel from "@/components/MainPanel/MainPanel";
+import PanelSelect, { PanelRoute } from "@/components/MainPanel/PanelSelect";
 
 interface AccountProps {
-    setRoute: (route: NavBarRoute) => void;
+    setRoute: (route: PanelRoute) => void;
 }
 
 export default function Account({setRoute}: AccountProps) {
     return (
         <MainPanel>
-            <NavBar selected={NavBarRoute.ACCOUNT} setRoute={setRoute}/>
+            <PanelSelect selected={PanelRoute.ACCOUNT} setRoute={setRoute}/>
         </MainPanel>
     )
 }

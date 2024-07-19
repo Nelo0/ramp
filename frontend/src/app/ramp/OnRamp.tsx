@@ -1,14 +1,14 @@
-import MainPanel from "@/components/MainPanel";
-import NavBar, { NavBarRoute } from "@/components/NavBar";
+import MainPanel from "@/components/MainPanel/MainPanel";
+import PanelSelect, { PanelRoute } from "@/components/MainPanel/PanelSelect";
 
 interface OnRampProps {
-    setRoute: (route: NavBarRoute) => void;
+    setRoute: (route: PanelRoute) => void;
 }
 
 export default function OnRamp({setRoute}: OnRampProps) {
     return (
         <MainPanel>
-            <NavBar selected={NavBarRoute.ON} setRoute={setRoute}/>
+            <PanelSelect selected={PanelRoute.ON} setRoute={setRoute}/>
         </MainPanel>
     )
 }

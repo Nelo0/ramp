@@ -1,9 +1,40 @@
-.quartz-logo {
+.nav {
     position: fixed;
     top: 20px;
-    left: 20px;
+    left: 40px;
+    right: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@media only screen and (max-width: 1130px) {
+    .nav {
+        left: 15px;
+    }
+}
+
+@media only screen and (max-width: 1030px) {
+    .nav {
+        width: var(--max-width);
+        height: 12VH;
+
+        top: 0px;
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.quartz-logo {
     padding: 10px;
-    width: 220px;
+    width: 180px;
     height: auto;
 }
 
@@ -36,6 +67,13 @@
 
     position: relative;
     z-index: 500;
+}
+
+@media only screen and (max-width: 1030px) {
+    .transactions {
+        margin-top: 95VH;
+        padding-top: 20px;
+    }
 }
 
 .transactions-content {

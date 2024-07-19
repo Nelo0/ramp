@@ -6,7 +6,7 @@ import OffRamp from "./OffRamp";
 import Transactions from "./Transactions";
 import { useEffect, useState } from "react";
 import { Status, Transaction } from "@/model/Transaction";
-import { NavBarRoute } from "@/components/NavBar";
+import { PanelRoute } from "@/components/MainPanel/PanelSelect";
 import Account from "./Account";
 import OnRamp from "./OnRamp";
 
@@ -15,7 +15,7 @@ export default function Ramp() {
     const USER_WALLET = "GgohWvPKDBDgDmkX17GrNMbmAiVy7wQVqx1yzLeG6VGf";
     const TRANSACTION_REFRESH_SPEED = 5000;
 
-    const [route, setRoute] = useState(NavBarRoute.OFF);
+    const [route, setRoute] = useState(PanelRoute.OFF);
     
     const [transactions, setTransactions] = useState<Transaction[]>([]);
 
@@ -58,25 +58,30 @@ export default function Ramp() {
 
     return (
         <main>
-            <a href="https://quartzpay.io/">
-                <Image
-                    src="/quartz_logo.svg"
-                    alt="Quartz"
-                    height={0}
-                    width={0}
-                    className={styles["quartz-logo"]}
-                />
-            </a>
+            <div className={styles["nav"]}>
+                <a href="https://quartzpay.io/">
+                    <Image
+                        src="/quartz_logo.svg"
+                        alt="Quartz"
+                        height={0}
+                        width={0}
+                        className={styles["quartz-logo"]}
+                    />
+                </a>
+                <div className={styles["nav-links"]}>
+                    <p>foo</p>
+                </div>
+            </div>
             
-            {(route === NavBarRoute.OFF) &&
+            {(route === PanelRoute.OFF) &&
                 <OffRamp setRoute={(route) => setRoute(route)}/>
             }
             
-            {(route === NavBarRoute.ON) &&
+            {(route === PanelRoute.ON) &&
                 <OnRamp setRoute={(route) => setRoute(route)}/>
             }
 
-            {(route === NavBarRoute.ACCOUNT) &&
+            {(route === PanelRoute.ACCOUNT) &&
                 <Account setRoute={(route) => setRoute(route)}/>
             }
 

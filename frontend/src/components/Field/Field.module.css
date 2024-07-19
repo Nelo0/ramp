@@ -49,3 +49,13 @@
 .field.copied {
     justify-content: center;
 }
+
+@media only screen and (max-width: 1030px) {
+    .field {
+        padding: 8px 12px;
+    }
+
+    .field.large {
+        padding: 16px 24px;
+    }
+}

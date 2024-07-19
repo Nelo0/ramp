@@ -1,16 +1,16 @@
 import QRCode from "@/components/QRCode";
 import styles from "./page.module.css";
 import Field from "@/components/Field/Field";
-import MainPanel from "@/components/MainPanel";
+import MainPanel from "@/components/MainPanel/MainPanel";
 import Image from "next/image";
 import { useState } from "react";
 import { hashToDisplayString } from "@/utils/solanaUtils";
 import FieldHeading from "@/components/Field/FieldHeading";
 import Tooltip from "@/components/Tooltip";
-import NavBar, { NavBarRoute } from "@/components/NavBar";
+import PanelSelect, { PanelRoute } from "@/components/MainPanel/PanelSelect";
 
 interface OffRampProps {
-    setRoute: (route: NavBarRoute) => void;
+    setRoute: (route: PanelRoute) => void;
 }
 
 export default function OffRamp({setRoute}: OffRampProps) {
@@ -26,7 +26,7 @@ export default function OffRamp({setRoute}: OffRampProps) {
 
     return (
         <MainPanel>
-            <NavBar selected={NavBarRoute.OFF} setRoute={setRoute}/>
+            <PanelSelect selected={PanelRoute.OFF} setRoute={setRoute}/>
 
             <div>
                 <h1 className={styles["heading"]}>Deposit Addresses</h1>
