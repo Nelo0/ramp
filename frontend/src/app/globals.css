@@ -78,6 +78,13 @@
     --size-p: calc(0.8 * var(--size-p-base));
 
     --nav-height: 60px;
+    --tooltip-size: 11.5px;
+  }
+}
+
+@media only screen and (max-width: 475px) {
+  :root {
+    --nav-height: 55px;
   }
 }
 

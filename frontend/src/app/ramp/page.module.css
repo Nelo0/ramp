@@ -28,7 +28,7 @@
 
 @media only screen and (max-width: 680px) {
     .nav {
-        width: 95%;
+        width: 95VW;
     }
 }
 

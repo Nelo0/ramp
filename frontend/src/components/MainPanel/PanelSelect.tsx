@@ -19,7 +19,7 @@ export default function PanelSelect({selected, setRoute}: PanelSelectProps) {
 
     return (
         <div className={styles["nav"]}>
-            <div className={styles["nav-section"]}>
+            <div className={`${styles["nav-section"]} ${styles["ramps"]}`}>
                 <button 
                     onClick={() => setRoute(PanelRoute.OFF)} 
                     className={`${styles["ramp-button"]} ${offRamp ? styles["active"] : styles["inactive"]}`}

@@ -13,6 +13,12 @@
     }
 }
 
+@media only screen and (max-width: 475px) {
+    .nav { 
+        width: 92VW;
+    }
+}
+
 .nav-section {
     display: flex;
     align-items: center;
@@ -48,6 +54,17 @@
 @media only screen and (max-width: 680px) {
     .ramp-button { 
         padding: 0px 44px;
+    }
+}
+
+@media only screen and (max-width: 475px) {
+    .ramp-button { 
+        padding: 0px;
+        flex-grow: 1;
+    }
+
+    .ramps {
+        flex-grow: 1;
     }
 }
 

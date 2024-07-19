@@ -9,3 +9,9 @@
 
     padding-left: 3px;
 }
+
+@media only screen and (max-width: 475px) {
+    .field-heading {
+        width: 92VW;
+    }
+}

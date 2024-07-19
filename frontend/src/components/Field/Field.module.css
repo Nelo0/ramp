@@ -14,6 +14,12 @@
     align-items: center;
 }
 
+@media only screen and (max-width: 475px) {
+    .field {
+        width: 92VW;
+    }
+}
+
 .field:hover {
     background: 
         var(--overlay), 
