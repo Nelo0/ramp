@@ -4,14 +4,18 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import OffRamp from "./OffRamp";
 import Transactions from "./Transactions";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Status, Transaction } from "@/model/Transaction";
+import { NavBarRoute } from "@/components/NavBar";
+import Account from "./Account";
+import OnRamp from "./OnRamp";
 
 export default function Ramp() {
     const TRANSACTION_API_URL = "http://localhost:3001/api/txHistory";
     const USER_WALLET = "GgohWvPKDBDgDmkX17GrNMbmAiVy7wQVqx1yzLeG6VGf";
     const TRANSACTION_REFRESH_SPEED = 5000;
+
+    const [route, setRoute] = useState(NavBarRoute.OFF);
     
     const [transactions, setTransactions] = useState<Transaction[]>([]);
 
@@ -64,7 +68,17 @@ export default function Ramp() {
                 />
             </a>
             
-            <OffRamp/>
+            {(route === NavBarRoute.OFF) &&
+                <OffRamp setRoute={(route) => setRoute(route)}/>
+            }
+            
+            {(route === NavBarRoute.ON) &&
+                <OnRamp setRoute={(route) => setRoute(route)}/>
+            }
+
+            {(route === NavBarRoute.ACCOUNT) &&
+                <Account setRoute={(route) => setRoute(route)}/>
+            }
 
             <Transactions transactions={transactions}/>
         </main>

@@ -9,7 +9,11 @@ import FieldHeading from "@/components/Field/FieldHeading";
 import Tooltip from "@/components/Tooltip";
 import NavBar, { NavBarRoute } from "@/components/NavBar";
 
-export default function OffRamp() {
+interface OffRampProps {
+    setRoute: (route: NavBarRoute) => void;
+}
+
+export default function OffRamp({setRoute}: OffRampProps) {
     // TODO -> keep this constants somewhere better
     const ADDRESS_SNS = "quartzpay.sol";
     const ADDRESS_WALLET = "CHS52vBAVvCNAmy2jjtWWcVstwATaK37TyjwXTHzem1Q"; // TODO - Replace with Solana address type? Or check it's a valid address?
@@ -22,7 +26,7 @@ export default function OffRamp() {
 
     return (
         <MainPanel>
-            <NavBar selected={NavBarRoute.OFF}/>
+            <NavBar selected={NavBarRoute.OFF} setRoute={setRoute}/>
 
             <div>
                 <h1 className={styles["heading"]}>Deposit Addresses</h1>

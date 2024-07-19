@@ -9,9 +9,10 @@ export enum NavBarRoute {
 
 interface NavBarProps {
     selected: NavBarRoute;
+    setRoute: (route: NavBarRoute) => void;
 }
 
-export default function NavBar({selected}: NavBarProps) {
+export default function NavBar({selected, setRoute}: NavBarProps) {
     const offRamp = (selected === NavBarRoute.OFF);
     const onRamp = (selected === NavBarRoute.ON);
     const account = (selected === NavBarRoute.ACCOUNT);
@@ -19,14 +20,23 @@ export default function NavBar({selected}: NavBarProps) {
     return (
         <div className={styles["nav"]}>
             <div className={styles["nav-section"]}>
-                <button className={`${styles["ramp-button"]} ${offRamp ? styles["active"] : styles["inactive"]}`}>
+                <button 
+                    onClick={() => setRoute(NavBarRoute.OFF)} 
+                    className={`${styles["ramp-button"]} ${offRamp ? styles["active"] : styles["inactive"]}`}
+                >
                     <p>Off-ramp</p>
                 </button>
-                <button className={`${styles["ramp-button"]} ${onRamp ? styles["active"] : styles["inactive"]}`}>
+                <button 
+                    onClick={() => setRoute(NavBarRoute.ON)} 
+                    className={`${styles["ramp-button"]} ${onRamp ? styles["active"] : styles["inactive"]}`}
+                >
                     <p>On-ramp</p>
                 </button>
             </div>
-            <button className={`${styles["nav-section"]} ${styles["account"]} ${account ? styles["active"] : styles["inactive"]}`}>
+            <button 
+                onClick={() => setRoute(NavBarRoute.ACCOUNT)} 
+                className={`${styles["nav-section"]} ${styles["account"]} ${account ? styles["active"] : styles["inactive"]}`}
+            >
                 {!account &&
                     <Image
                         src="profile.svg"
