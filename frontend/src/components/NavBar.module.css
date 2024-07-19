@@ -1,0 +1,46 @@
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.ramps {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: var(--color-background);
+}
+
+.account {
+    padding: 19px;
+    background: var(--color-background);
+    height: var(--nav-height);
+}
+
+.account img {
+    height: 32px;
+    width: 32px;
+}
+
+.account.active {   
+
+}
+
+.ramp-button {
+    padding: 20px 54px;
+    height: var(--nav-height);
+}
+
+.ramp-button p {
+    font-size: 24.2px;
+}
+
+.ramp-button.active {
+
+}
+
+.ramp-button.active p {
+
+}

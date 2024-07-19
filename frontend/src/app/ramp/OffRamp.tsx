@@ -7,6 +7,7 @@ import { useState } from "react";
 import { hashToDisplayString } from "@/utils/solanaUtils";
 import FieldHeading from "@/components/Field/FieldHeading";
 import Tooltip from "@/components/Tooltip";
+import NavBar, { NavBarRoute } from "@/components/NavBar";
 
 export default function OffRamp() {
     // TODO -> keep this constants somewhere better
@@ -21,6 +22,8 @@ export default function OffRamp() {
 
     return (
         <MainPanel>
+            <NavBar selected={NavBarRoute.OFF}/>
+
             <div>
                 <h1 className={styles["heading"]}>Deposit Addresses</h1>
                 <h2 className={`light ${styles["subheading"]}`}>Convert crypto to fiat</h2>
@@ -28,36 +31,36 @@ export default function OffRamp() {
 
             <QRCode address={ADDRESS_WALLET}/>
 
-            <FieldHeading heading={addressHeading}>
-                {useSNS && 
-                    <Tooltip src={"/tooltip_help.svg"} alt={"?"}>
-                        <small>
-                            <a href="https://www.sns.id/" target="_blank">Solana Name Service</a> is a way to represent wallet addresses as easy-to-remember domains. “quartzpay.sol” is our SNS domain.
-                        </small>
-                    </Tooltip>
-                }
-            </FieldHeading>
+            <div>
+                <FieldHeading heading={addressHeading}>
+                    {useSNS && 
+                        <Tooltip src={"/tooltip_help.svg"} alt={"?"}>
+                            <small>
+                                <a href="https://www.sns.id/" target="_blank">Solana Name Service</a> is a way to represent wallet addresses as easy-to-remember domains. “quartzpay.sol” is our SNS domain.
+                            </small>
+                        </Tooltip>
+                    }
+                </FieldHeading>
 
-            <Field copyText={addressCopy} large={true}>
-                <div className={styles["sns-tooltip"]}>
-                    <p>{addressDisplay}</p>
-                </div>
-                <Image
-                    src="/copy.svg"
-                    alt="Copy"
-                    height={0}
-                    width={0}
-                />
-            </Field>
-            
-            <div className={styles["buttons-container"]}>
-                <button
-                    className={styles["button-link"]}
-                    onClick={() => setUseSNS(!useSNS)}
-                >
-                    {switchSNSText}
-                </button>
+                <Field copyText={addressCopy} large={true}>
+                    <div className={styles["sns-tooltip"]}>
+                        <p>{addressDisplay}</p>
+                    </div>
+                    <Image
+                        src="/copy.svg"
+                        alt="Copy"
+                        height={0}
+                        width={0}
+                    />
+                </Field>
             </div>
+            
+            <button
+                className={styles["button-link"]}
+                onClick={() => setUseSNS(!useSNS)}
+            >
+                {switchSNSText}
+            </button>
         </MainPanel>
     )
 }

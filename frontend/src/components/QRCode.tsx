@@ -13,8 +13,8 @@ export default function QRCode({address}: QRCodeProps) {
             <Image
                 src="/qr_placeholder.jpg"
                 alt="QR code version of wallet address"
-                height={250}
-                width={250}
+                height={215}
+                width={215}
             />
         </div>
     )

@@ -33,6 +33,7 @@
   --transaction-card-border-radius: 16px;
   --field-width: 425px;
   --tooltip-size: 13px;
+  --nav-height: 70px;
 }
 
 body {
