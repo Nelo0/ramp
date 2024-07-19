@@ -88,7 +88,7 @@ export default function TransactionCard({transaction, dateLabelled} : Transactio
                             width={26.4}
                         />
 
-                        <CurrencyInfo src={outputTokenIcon} name={transaction.outputCurrency} amount={transaction.amountOutputCurrency}/>
+                        <CurrencyInfo src={outputTokenIcon} name={transaction.outputCurrency} amount={transaction.amountOutputCurrency} loading={transaction.status === "LOADING"}/>
                     </div>
 
                     <div className={styles["basic-info"]}>
@@ -102,13 +102,16 @@ export default function TransactionCard({transaction, dateLabelled} : Transactio
                     <p className="light">Transaction type</p> <p>{transactionTypeText}</p>
                     <p className="light">Created on</p> <p>{formattedDateTime}</p>
                     <p className="light">{transaction.inputCurrency} sent</p> <p>{isInputEuro && "€"}{transaction.amountInputCurrency}</p>
-                    <p className="light">{transaction.outputCurrency} received</p> <p>{isOutputEuro && "€"}{transaction.amountOutputCurrency}</p>
-                    <p className="light">Solana gas fee</p> <p>~€{transaction.gasFeeEuro}</p>
-                    <p className="light">Transaction fee</p> <p>€{transaction.transactionFeeEuro} <span className="light">(0.5%)</span></p>
+                    <p className="light">{transaction.outputCurrency} received</p> {transaction.status != "LOADING" ? <p>{isOutputEuro && "€"}{transaction.amountOutputCurrency}</p> : <p>...</p>}
+                    <p className="light">Solana gas fee</p> {transaction.status !== "LOADING" ? <p>~€{transaction.gasFeeEuro}</p> : <p>...</p> }
+                    <p className="light">Transaction fee</p> {transaction.status !== "LOADING" ? <p>€{transaction.transactionFeeEuro} <span className="light">(0.5%)</span></p> : <p>...</p>} 
                     <p className="light">{fiatPrefix} IBAN</p> <p>{transaction.iban}</p>
                     <p className="light">{fiatPrefix} BIC</p> <p>{transaction.bic}</p>
                     <p className="light">Transaction hash</p>
                     <div className={styles["transaction-hash"]}>
+                        {
+                        transaction.status !== "LOADING" ?
+                        <>
                         <p className={styles["hash-display"]}>{hashToDisplayString(transaction.transactionHash)}</p>
                         <button 
                             className={styles["hash-button"]}
@@ -131,6 +134,10 @@ export default function TransactionCard({transaction, dateLabelled} : Transactio
                                 />
                             </button>
                         </a>
+                        </>
+                        :
+                        <p>...</p>
+                    }
                     </div>
                 </div>
             </div>

@@ -1,7 +1,8 @@
 export enum Status {
     FAIL = "FAIL",
     PROCESSING = "PROCESSING",
-    SUCCESS = "SUCCESS"
+    SUCCESS = "SUCCESS",
+    LOADING= "LOADING",
 }
 
 export interface Transaction {

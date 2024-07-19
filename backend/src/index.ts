@@ -83,8 +83,8 @@ export const openHeliusWs = () => {
                 offramp: true,
                 status: "LOADING",
                 txHash: "",
-                depositHash: "",
-                amountInput: 0,
+                depositHash: signature,
+                amountInput: depositAmount,
                 amountOutput: 0,
                 gasFee: 0,
                 txFee: 0

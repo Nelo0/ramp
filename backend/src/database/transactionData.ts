@@ -65,11 +65,6 @@ export const addTransactionData = async (values: TransactionDataDb) => {
     const gasFeeEuroUi = formartToUi(gasFee * solPriceEur, 6)
     const rampFeeEuroUi = formartToUi(txFee * solPriceEur, 6)
 
-    console.log("amount input", amountInputUi)
-    console.log("amount output", amountOutputUi)
-    console.log("gasFeeEuro", gasFeeEuroUi)
-    console.log("rampFeeEuro", rampFeeEuroUi)
-
     try {
         const txIdRow = await sql`
 INSERT INTO transaction_data (
@@ -82,9 +77,10 @@ INSERT INTO transaction_data (
     ${txHash}, ${depositHash}, ${status}
 ) RETURNING transaction_id;;
         `;
-        console.log("Signature added successfully");
 
         const txId: number[] = txIdRow.map((tx: any) => (tx.transaction_id));
+        console.log("Signature added successfully, tx id: ", txId[0]);
+
         return txId[0];
     } catch (error) {
         console.error("Error adding signature: ", error);

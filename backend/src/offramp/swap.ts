@@ -30,6 +30,9 @@ export const getSwapIntructions = async (amount: number) => {
 
 
   const euroeDepositAddress = await initiateEuroeBurn(euroeOfframpAmount)
+  //CHS52vBAVvCNAmy2jjtWWcVstwATaK37TyjwXTHzem1Q (server wallet address)
+  //const euroeDepositAddress = "CHS52vBAVvCNAmy2jjtWWcVstwATaK37TyjwXTHzem1Q"
+
   const euroeATAObj = await getATAOrInstruction(stableTokenMint, new PublicKey(euroeDepositAddress))
 
   //TODO: IN the future we could use the MAX accounts property to ensure that the wrapping, swap and send instructions all fit in one transaction.
