@@ -10,7 +10,8 @@ import { getMockOfframpInfo } from "./offramp/mockOfframp.js";
 import { addSignatures, getUsersAddressArray } from "./database/schema.js";
 import express, { Application, Request, Response } from 'express';
 import routes from "./routes/index.js";
-import { addTransactionData } from "./database/transactionData.js";
+import { addTransactionData, updateTransactionData } from "./database/transactionData.js";
+import { TransactionDataDb } from "./types/index.js";
 
 const app: Application = express();
 const port: number = 3001;
@@ -60,7 +61,6 @@ export const openHeliusWs = () => {
                 if (userAddress == quartzDepositAddress) {
                     console.log("Quartz sent this transaction, dont process it more")
                     await addSignatures([signature]);
-
                 } else {
                     //if not sent by quartz
                     //if deposit amount is not greater than transaction fee:
@@ -78,6 +78,17 @@ export const openHeliusWs = () => {
                 }
                 continue
             }
+            //add TransactionData to database and set it as LOADING, (before transaction lands)
+            const txDbId = await addTransactionData({
+                offramp: true,
+                status: "LOADING",
+                txHash: "",
+                depositHash: "",
+                amountInput: 0,
+                amountOutput: 0,
+                gasFee: 0,
+                txFee: 0
+            } as TransactionDataDb);
 
             let transactionInfo: TransactionInfo;
             if (ENV === "devnet") {
@@ -88,17 +99,17 @@ export const openHeliusWs = () => {
             const offrampTransaction = transactionInfo.transaction
             offrampTransaction.sign([quartzKeypair])
             console.log("sending Offramp transaction")
-            let txId;
+            let txHash;
             try {
-                txId = await sendTransactionLogic(offrampTransaction)
+                txHash = await sendTransactionLogic(offrampTransaction)
             } catch (error) {
                 console.log("Send offramp transaction error: ", error);
             }
-            if (txId == "") {
+            if (txHash == "") {
                 console.log("Transaction failed")
                 continue;
             }
-            if (txId == undefined || txId == null) {
+            if (txHash == undefined || txHash == null) {
                 //Dont store to database, this means that next time the server runs it will retry the offramp transaction since it will think that its a new unprocessed trasnaction 
                 console.log("Transaction did not get accepted to the blockchain, not storing signature to database")
                 continue;
@@ -106,9 +117,18 @@ export const openHeliusWs = () => {
 
             console.log("Offramp transaction SUCCESS!, adding txId for deposit and offramp to processed transactions to database")
             //add txId to database
-            await addSignatures([signature, txId]);
-            //add TransactionData to database and set it as PROCESSING
-            await addTransactionData(true, "PROCESSING", txId, signature, depositAmount, transactionInfo.amount, 0.00001, 0);
+            await addSignatures([signature, txHash]);
+            //update TransactionData to database and set it as PROCESSING
+            await updateTransactionData({
+                txId: txDbId,
+                txHash: txHash,
+                depositHash: signature,
+                amountInput: depositAmount,
+                amountOutput: transactionInfo.amount,
+                gasFee: 0.00001,
+                txFee: 0,
+                status: "PROCESSING"
+            } as TransactionDataDb)
         }
     };
 

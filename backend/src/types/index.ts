@@ -20,6 +20,29 @@ export interface TransactionData {
     status: Status;
 }
 
+export type TransactionDataDb = {
+    txId?: number,
+    offramp?: boolean,
+    status?: string,
+    txHash?: string,
+    depositHash?: string,
+    amountInput?: number,
+    amountOutput?: number,
+    gasFee?: number,
+    txFee?: number
+}
+
+export interface EditTransactionDataDb {
+    offramp: boolean,
+    amount_input_currency: number | string,
+    amount_output_currency: number | string,
+    gas_fee_euro: number | string,
+    transaction_fee_euro: number | string,
+    transaction_hash: string,
+    deposit_hash: string,
+    status: string,
+}
+
 export type SignatureRow = {
     signature: string;
 };
