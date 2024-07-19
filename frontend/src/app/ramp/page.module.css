@@ -94,3 +94,9 @@
     margin: 15px 0px 0px 0px;
     padding: 0px;
 }
+
+@media only screen and (max-width: 680px) {
+    .transactions-content {
+        width: 95VW
+    }
+}

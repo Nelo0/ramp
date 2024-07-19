@@ -84,8 +84,9 @@ export default function TransactionCard({transaction, dateLabelled} : Transactio
                         <Image
                             src="/right_arrow.svg"
                             alt="converted into"
-                            height={19}
-                            width={26.4}
+                            height={0}
+                            width={0}
+                            className={styles["arrow"]}
                         />
 
                         <CurrencyInfo src={outputTokenIcon} name={transaction.outputCurrency} amount={transaction.amountOutputCurrency}/>

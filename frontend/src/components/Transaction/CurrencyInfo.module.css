@@ -11,3 +11,10 @@
     margin-left: 14px;
     margin-right: 6px;
 }
+
+@media only screen and (max-width: 570px) {
+    .currency-amount {
+        margin-left: 10px;
+        margin-right: 4.3px;
+    }
+}

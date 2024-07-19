@@ -31,6 +31,12 @@
     outline: 1.5px solid var(--placeholder-glass-stroke);
 }
 
+@media only screen and (max-width: 570px) {
+    .card-base {
+        padding: 25px 10px;
+    }
+}
+
 .card-base:hover {
     --overlay-color: rgba(255, 255, 255, 0.03);
     background-image: 
@@ -64,14 +70,34 @@
     grid-template-columns: 4.5fr 1fr 4.5fr;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
-    justify-items: left;
+    justify-items: space-between;
     align-items: center;
+}
+
+.arrow {
+    height: 19px;
+    width: 26.4px;
+    margin: auto;
 }
 
 .basic-info {
     display: flex;
-    align-items: right;
-    gap: 25px;
+    align-items: center;
+    justify-content: space-between;
+    width: 24%;
+}
+
+@media only screen and (max-width: 570px) {
+    .arrow {
+        height: 15.2px;
+        width: 21.12px;
+    }
+
+    .basic-info {
+        flex-direction: column;
+        gap: 3px;
+        width: auto;
+    }
 }
 
 .card-details {
