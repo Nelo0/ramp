@@ -78,6 +78,14 @@
     min-width: 230px;
 }
 
+.bank-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 30px;
+    grid-row-gap: 10px;
+    justify-content: left;
+}
+
 .transactions {
     margin-top: 92VH;
     padding-top: 25px;

@@ -22,9 +22,14 @@ export default function Ramp() {
     const USER_BANK_NAME = "Santander";
     const USER_BANK_ADDRESS = 
         `Av. del Port, 131,
-        Camins al Grau, 
+        Camins al Grau,
         46022 Valencia,
         Spain`;
+
+    // TODO - Implement editing account details
+    const editUserWallet = () => {console.log("Edit wallet")};
+    const editUserName = () => {console.log("Edit name")};
+    const editUserBank = () => {console.log("Edit bank")};
 
     const TRANSACTION_API_URL = "http://localhost:3001/api/txHistory";
     const TRANSACTION_REFRESH_SPEED = 5000;
@@ -110,6 +115,9 @@ export default function Ramp() {
                     bankHolder={USER_BANK_HOLDER}
                     bankName={USER_BANK_NAME}
                     bankAddress={USER_BANK_ADDRESS}
+                    onEditWallet={editUserWallet}
+                    onEditName={editUserName}
+                    onEditBank={editUserBank}
                     setRoute={(route) => setRoute(route)}
                 />
             }

@@ -12,10 +12,15 @@ interface AccountProps {
     bankHolder: string;
     bankName: string;
     bankAddress: string;
+    onEditWallet: () => void;
+    onEditName: () => void;
+    onEditBank: () => void;
     setRoute: (route: PanelRoute) => void;
 }
 
-export default function Account({userWallet, name, iban, bankHolder, bankName, bankAddress, setRoute}: AccountProps) {
+export default function Account({
+    userWallet, name, iban, bankHolder, bankName, bankAddress, onEditWallet, onEditName, onEditBank, setRoute
+}: AccountProps) {
     return (
         <MainPanel>
             <PanelSelect selected={PanelRoute.ACCOUNT} setRoute={setRoute}/>
@@ -27,7 +32,7 @@ export default function Account({userWallet, name, iban, bankHolder, bankName, b
             <div className={`${styles["panel-content"]} ${styles["justify-top"]}`}>
                 <div>
                     <FieldHeading heading={"Solana wallet address"}/>
-                    <Field growText={true} accent={true}>
+                    <Field growText={true} accent={true} onClick={onEditWallet}>
                         <p>{userWallet}</p>
                         <Image
                             src="/edit_accent.svg"
@@ -40,8 +45,26 @@ export default function Account({userWallet, name, iban, bankHolder, bankName, b
 
                 <div>
                     <FieldHeading heading={"Legal name"}/>
-                    <Field>
+                    <Field onClick={onEditName}>
                         <p>{name}</p>
+                        <Image
+                            src="/edit.svg"
+                            alt="Edit"
+                            height={23}
+                            width={23}
+                        />
+                    </Field>
+                </div>
+
+                <div>
+                    <FieldHeading heading={"Bank details"}/>
+                    <Field onClick={onEditBank}>
+                        <div className={styles["bank-details"]}>
+                            <small className="light">IBAN</small> <small>{iban}</small>
+                            <small className="light">Bank holder name</small> <small>{bankHolder}</small>
+                            <small className="light">Bank name</small> <small>{bankName}</small>
+                            <small className="light">Bank address</small> <small>{bankAddress}</small>
+                        </div>
                         <Image
                             src="/edit.svg"
                             alt="Edit"
