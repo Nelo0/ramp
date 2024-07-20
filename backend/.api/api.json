@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "apis": [
+    {
+      "identifier": "bridge-docs",
+      "source": "@bridge-docs/v0#i5bzhlysti1ry",
+      "integrity": "sha512-to2mBg6S4zMGdWGhbEdInL6vyRvRJH2f0pojLWc0noIqyRqXEL+O7tiHrbnDs2xo2MXCPoMyKSsDSD1stsg1uA==",
+      "installerVersion": "6.1.2"
+    }
+  ]
+}

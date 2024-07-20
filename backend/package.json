@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@api/bridge-docs": "file:.api/apis/bridge-docs",
     "@project-serum/anchor": "^0.26.0",
     "@solana-developers/helpers": "^2.3.0",
     "@solana/spl-token": "^0.4.6",
