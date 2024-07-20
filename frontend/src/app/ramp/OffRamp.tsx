@@ -24,45 +24,45 @@ export default function OffRamp({addressSns, addressWallet, setRoute}: OffRampPr
 
     return (
         <MainPanel>
-            <div>
-                <PanelSelect selected={PanelRoute.OFF} setRoute={setRoute}/>
+            <PanelSelect selected={PanelRoute.OFF} setRoute={setRoute}/>
 
-                <div className={styles["heading-wrapper"]}>
-                    <h1 className={styles["heading"]}>Deposit Addresses</h1>
-                    <h2 className={`light ${styles["subheading"]}`}>Convert USDC to fiat</h2>
+            <div className={styles["heading-wrapper"]}>
+                <h1 className={styles["heading"]}>Deposit Addresses</h1>
+                <h2 className={`light ${styles["subheading"]}`}>Convert USDC to fiat</h2>
+            </div>
+
+            <div className={styles["panel-content"]}>
+                <QRCode address={addressWallet}/>
+
+                <div>
+                    <FieldHeading heading={addressHeading}>
+                        {useSNS && 
+                            <Tooltip src={"/tooltip_help.svg"} alt={"?"}>
+                                <small>
+                                    <a href="https://www.sns.id/" target="_blank">Solana Name Service</a> is a way to represent wallet addresses as easy-to-remember domains. “quartzpay.sol” is our SNS domain.
+                                </small>
+                            </Tooltip>
+                        }
+                    </FieldHeading>
+
+                    <Field copyText={addressCopy} large={true}>
+                        <p>{addressDisplay}</p>
+                        <Image
+                            src="/copy.svg"
+                            alt="Copy"
+                            height={36}
+                            width={36}
+                        />
+                    </Field>
                 </div>
+                
+                <button
+                    className={styles["button-link"]}
+                    onClick={() => setUseSNS(!useSNS)}
+                >
+                    {switchSNSText}
+                </button>
             </div>
-
-            <QRCode address={addressWallet}/>
-
-            <div>
-                <FieldHeading heading={addressHeading}>
-                    {useSNS && 
-                        <Tooltip src={"/tooltip_help.svg"} alt={"?"}>
-                            <small>
-                                <a href="https://www.sns.id/" target="_blank">Solana Name Service</a> is a way to represent wallet addresses as easy-to-remember domains. “quartzpay.sol” is our SNS domain.
-                            </small>
-                        </Tooltip>
-                    }
-                </FieldHeading>
-
-                <Field copyText={addressCopy} large={true}>
-                    <p>{addressDisplay}</p>
-                    <Image
-                        src="/copy.svg"
-                        alt="Copy"
-                        height={36}
-                        width={36}
-                    />
-                </Field>
-            </div>
-            
-            <button
-                className={styles["button-link"]}
-                onClick={() => setUseSNS(!useSNS)}
-            >
-                {switchSNSText}
-            </button>
         </MainPanel>
     )
 }

@@ -20,97 +20,97 @@ export default function OnRamp({userWallet, setRoute}: OnRampProps) {
 
     return (
         <MainPanel>
-            <div>
-                <PanelSelect selected={PanelRoute.ON} setRoute={setRoute}/>
+            <PanelSelect selected={PanelRoute.ON} setRoute={setRoute}/>
 
-                <div className={styles["heading-wrapper"]}>
-                    <h1 className={styles["heading"]}>Deposit Addresses</h1>
-                    <h2 className={`light ${styles["subheading"]}`}>Convert fiat to USDC</h2>
+            <div className={styles["heading-wrapper"]}>
+                <h1 className={styles["heading"]}>Deposit Addresses</h1>
+                <h2 className={`light ${styles["subheading"]}`}>Convert fiat to USDC</h2>
+            </div>
+
+            <div className={`${styles["panel-content"]} ${styles["justify-top"]}`}>
+                <div>
+                    <FieldHeading heading={"IBAN"}/>
+                    <Field copyText={IBAN}>
+                        <p>{IBAN}</p>
+                        <Image
+                            src="/copy.svg"
+                            alt="Copy"
+                            height={23}
+                            width={23}
+                        />
+                    </Field>
                 </div>
-            </div>
 
-            <div>
-                <FieldHeading heading={"IBAN"}/>
-                <Field copyText={IBAN}>
-                    <p>{IBAN}</p>
-                    <Image
-                        src="/copy.svg"
-                        alt="Copy"
-                        height={23}
-                        width={23}
-                    />
-                </Field>
-            </div>
+                <div>
+                    <FieldHeading heading={"BIC"}/>
+                    <Field copyText={BIC}>
+                        <p>{BIC}</p>
+                        <Image
+                            src="/copy.svg"
+                            alt="Copy"
+                            height={23}
+                            width={23}
+                        />
+                    </Field>
+                </div>
 
-            <div>
-                <FieldHeading heading={"BIC"}/>
-                <Field copyText={BIC}>
-                    <p>{BIC}</p>
-                    <Image
-                        src="/copy.svg"
-                        alt="Copy"
-                        height={23}
-                        width={23}
-                    />
-                </Field>
-            </div>
+                <div>
+                    <FieldHeading heading={"Payee's name"}/>
+                    <Field copyText={NAME}>
+                        <p>{NAME}</p>
+                        <Image
+                            src="/copy.svg"
+                            alt="Copy"
+                            height={23}
+                            width={23}
+                        />
+                    </Field>
+                </div>
 
-            <div>
-                <FieldHeading heading={"Payee's name"}/>
-                <Field copyText={NAME}>
-                    <p>{NAME}</p>
-                    <Image
-                        src="/copy.svg"
-                        alt="Copy"
-                        height={23}
-                        width={23}
-                    />
-                </Field>
-            </div>
+                <div>
+                    <FieldHeading heading={"Payee's address"}/>
+                    <Field copyText={PAYEE_ADDRESS}>
+                        <p>{PAYEE_ADDRESS}</p>
+                        <Image
+                            src="/copy.svg"
+                            alt="Copy"
+                            height={23}
+                            width={23}
+                        />
+                    </Field>
+                </div>
 
-            <div>
-                <FieldHeading heading={"Payee's address"}/>
-                <Field copyText={PAYEE_ADDRESS}>
-                    <p>{PAYEE_ADDRESS}</p>
-                    <Image
-                        src="/copy.svg"
-                        alt="Copy"
-                        height={23}
-                        width={23}
-                    />
-                </Field>
-            </div>
+                <div>
+                    <FieldHeading heading={"Bank's address"}/>
+                    <Field copyText={BANK_ADDRESS}>
+                        <p>{BANK_ADDRESS}</p>
+                        <Image
+                            src="/copy.svg"
+                            alt="Copy"
+                            height={23}
+                            width={23}
+                        />
+                    </Field>
+                </div>
 
-            <div>
-                <FieldHeading heading={"Bank's address"}/>
-                <Field copyText={BANK_ADDRESS}>
-                    <p>{BANK_ADDRESS}</p>
-                    <Image
-                        src="/copy.svg"
-                        alt="Copy"
-                        height={23}
-                        width={23}
-                    />
-                </Field>
-            </div>
-
-            <div>
-                <FieldHeading heading={"With reference number"} bold={true}>
-                    <Tooltip src={"./tooltip_alert.svg"} alt={"!"}>
-                        <small>
-                            You must include the reference code exactly when making a bank transfer, or your funds may not be processed correctly.
-                        </small>
-                    </Tooltip>
-                </FieldHeading>
-                <Field copyText={userWallet} growText={true} accent={true}>
-                    <p>{userWallet}</p>
-                    <Image
-                        src="/copy_accent.svg"
-                        alt="Copy"
-                        height={23}
-                        width={23}
-                    />
-                </Field>
+                <div>
+                    <FieldHeading heading={"With reference number"} bold={true}>
+                        <Tooltip src={"./tooltip_alert.svg"} alt={"!"}>
+                            <small>
+                                You must include the reference code exactly when making a bank transfer, or your funds may not be processed correctly.
+                            </small>
+                        </Tooltip>
+                    </FieldHeading>
+                    <Field copyText={userWallet} growText={true} accent={true}>
+                        <p>{userWallet}</p>
+                        <Image
+                            src="/copy_accent.svg"
+                            alt="Copy"
+                            height={23}
+                            width={23}
+                        />
+                    </Field>
+                </div>
             </div>
         </MainPanel>
     )

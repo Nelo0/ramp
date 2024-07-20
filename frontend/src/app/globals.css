@@ -53,6 +53,8 @@
 
   --transaction-card-border-radius: 16px;
   --field-width: 425px;
+  --field-height: 50.53px;
+  --heading-height: 68.74px;
   --tooltip-size: 13px;
   --nav-height: 65px;
 }
@@ -80,6 +82,7 @@
     --size-p: calc(0.8 * var(--size-p-base));
 
     --nav-height: 55px;
+    --heading-height: 55px;
     --tooltip-size: 11.5px;
   }
 }

@@ -46,6 +46,8 @@
 
 .heading-wrapper {
     margin-top: 20px;
+    margin-bottom: 15px;
+    min-height: var(--heading-height);
 }
 
 .heading {
@@ -54,6 +56,19 @@
 
 .subheading {
     font-size: var(--size-p);
+}
+
+.panel-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.panel-content.justify-top {
+    justify-content: start;
+    gap: 11.5px;
 }
 
 .button-link {

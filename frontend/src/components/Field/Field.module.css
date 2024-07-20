@@ -2,7 +2,7 @@
     text-align: left;
     margin-top: 6px;
     width: var(--field-width);
-    min-height: 50.53px;
+    min-height: var(--field-height);
 
     background: var(--color-background);
     padding: 12px;
