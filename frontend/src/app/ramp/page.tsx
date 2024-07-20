@@ -51,9 +51,9 @@ export default function Ramp() {
         }
     }
     useEffect(() => {
-        fetchTransactions();
-        // const intervalId = setInterval(fetchTransactions, TRANSACTION_REFRESH_SPEED);
-        // return () => clearInterval(intervalId);
+        //fetchTransactions();
+        const intervalId = setInterval(fetchTransactions, TRANSACTION_REFRESH_SPEED);
+            return () => clearInterval(intervalId);
     }, [])
 
     return (

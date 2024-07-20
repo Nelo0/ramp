@@ -1,4 +1,4 @@
-import { Status, TransactionData, User } from "../types/index.js";
+import { EditTransactionDataDb, Status, TransactionData, TransactionDataDb, User } from "../types/index.js";
 import { formartToUi } from "../utils/utils.js";
 import sql from "./supabase.js";
 
@@ -48,28 +48,25 @@ export const getUsersTransactionsArray = async (userAddress: string) => {
 }
 
 
-export const addTransactionData = async (offramp: boolean, status: string, tx_hash: string, deposit_hash: string, amountInput: number, amountOutput: number, gasFee: number, txFee: number) => {
+export const addTransactionData = async (values: TransactionDataDb) => {
+    const { offramp, status, txHash, depositHash, amountInput, amountOutput, gasFee, txFee } = values;
+
+    if (offramp === undefined || status === undefined || txHash === undefined || depositHash === undefined || amountInput === undefined ||
+        amountOutput === undefined || gasFee === undefined || txFee === undefined) {
+        console.error("Could bot add Transaction data to database:  One or more required fields are undefined");
+        throw new Error("Could bot add Transaction data to databse: One or more required fields are undefined");
+    }
+
     console.log("Adding transaction data to database...")
-
     const solPriceEur = await getSolPriceInFiat("eur");
-
     const user = await getUserByEmail("GgohWvPKDBDgDmkX17GrNMbmAiVy7wQVqx1yzLeG6VGf");
-
     const amountInputUi = formartToUi(amountInput, 9)
     const amountOutputUi = formartToUi(amountOutput, 6)
     const gasFeeEuroUi = formartToUi(gasFee * solPriceEur, 6)
     const rampFeeEuroUi = formartToUi(txFee * solPriceEur, 6)
 
-    console.log("amount input", amountInputUi)
-
-    console.log("amount output", amountOutputUi)
-
-    console.log("gasFeeEuro", gasFeeEuroUi)
-
-    console.log("rampFeeEuro", rampFeeEuroUi)
-
     try {
-        await sql`
+        const txIdRow = await sql`
 INSERT INTO transaction_data (
     user_id, offramp, input_currency, output_currency, amount_input_currency, 
     amount_output_currency, gas_fee_euro, transaction_fee_euro, 
@@ -77,12 +74,68 @@ INSERT INTO transaction_data (
 ) VALUES (
     ${user.user_id}, ${offramp}, 'SOL', 'EUR', ${amountInputUi}, ${amountOutputUi}, ${gasFeeEuroUi}, ${rampFeeEuroUi}, 
     ${user.iban}, ${user.bic}, 
-    ${tx_hash}, ${deposit_hash}, ${status}
-);
+    ${txHash}, ${depositHash}, ${status}
+) RETURNING transaction_id;;
         `;
-        console.log("Signatures added successfully");
+
+        const txId: number[] = txIdRow.map((tx: any) => (tx.transaction_id));
+        console.log("Signature added successfully, tx id: ", txId[0]);
+
+        return txId[0];
     } catch (error) {
-        console.error("Error adding signatures: ", error);
+        console.error("Error adding signature: ", error);
+    }
+    throw new Error("Error adding signatures to database")
+}
+
+export const updateTransactionData = async (newValues: TransactionDataDb) => {
+    const { txId, offramp, status, txHash, depositHash, amountInput, amountOutput, gasFee, txFee } = newValues;
+
+    if (txId === undefined) {
+        console.log("No transaciton Id present, can't update transaction data.")
+        return
+    };
+
+    const solPriceEur = await getSolPriceInFiat("eur");
+    const amountInputUi = amountInput !== undefined ? formartToUi(amountInput, 9) : undefined;
+    const amountOutputUi = amountOutput !== undefined ? formartToUi(amountOutput, 6) : undefined;
+    const gasFeeEuroUi = gasFee !== undefined ? formartToUi(gasFee * solPriceEur, 6) : undefined;
+    const rampFeeEuroUi = txFee !== undefined ? formartToUi(txFee * solPriceEur, 6) : undefined;
+
+    // Construct dynamic SET clause
+    const columns = [];
+    if (offramp !== undefined) columns.push('offramp');
+    if (amountInputUi !== undefined) columns.push('amount_input_currency');
+    if (amountOutputUi !== undefined) columns.push('amount_output_currency');
+    if (gasFeeEuroUi !== undefined) columns.push('gas_fee_euro');
+    if (rampFeeEuroUi !== undefined) columns.push('transaction_fee_euro');
+    if (txHash !== undefined) columns.push('transaction_hash');
+    if (depositHash !== undefined) columns.push('deposit_hash');
+    if (status !== undefined) columns.push('status');
+
+    if (columns.length === 0) {
+        console.log("No fields to update");
+        return;
+    }
+
+    const newObject: EditTransactionDataDb = {
+        offramp: offramp!,
+        amount_input_currency: amountInputUi!,
+        amount_output_currency: amountOutputUi!,
+        gas_fee_euro: gasFeeEuroUi!,
+        transaction_fee_euro: rampFeeEuroUi!,
+        transaction_hash: txHash!,
+        deposit_hash: depositHash!,
+        status: status!,
+    }
+
+    try {
+        //@ts-ignore
+        await sql` UPDATE transaction_data SET ${sql<[newObj?]>(newObject, columns)}
+  where transaction_id = ${txId}
+`
+    } catch (error) {
+        console.error("Error editing transaction", txId, error);
     }
 }
 
@@ -136,20 +189,3 @@ async function getUserByEmail(wallet_address: string): Promise<User> {
         bic: user.bic
     };
 }
-
-// async function main() {
-//    //const solPriceEur = await getSolPriceInFiat("eur");
-//    //const user = await getUserByEmail("GgohWvPKDBDgDmkX17GrNMbmAiVy7wQVqx1yzLeG6VGf");
-//    //console.log("User info: ", user)
-
-//    //await addTransactionData(true, "SUCCESS", "3EEvzg5hfowGPhDHSwSGY4bmhPsreVtF8G44Xh6McmJHvoNsxCz7ti6CfTMHkkWJGDadSJ5SMZyy78Ke8UwXvSFs", "3EEvzg5hfowGPhDHSwSGY4bmhPsreVtF8G44Xh6McmJHvoNsxCz7ti6CfTMHkkWJGDadSJ5SMZyy78Ke8UwXvSFs", 0.0001, 0.01, 0.00001, 0)
-
-
-
-// const x = formartToUi(10000, 6)
-
-// console.log("x", x )
-// }
-
-//main()
-//1132.423400000

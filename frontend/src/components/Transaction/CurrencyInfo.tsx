@@ -7,9 +7,10 @@ interface CurrencyInfoProps {
     src: string;
     name: string;
     amount: number;
+    loading?: boolean;
 }
 
-export default function CurrencyInfo({src, name, amount}: CurrencyInfoProps) {
+export default function CurrencyInfo({src, name, amount, loading}: CurrencyInfoProps) {
     const THRESHOLD = 7;
 
     const isEuro = (name == "EUR");
@@ -25,7 +26,7 @@ export default function CurrencyInfo({src, name, amount}: CurrencyInfoProps) {
                 width={36}
             />
 
-            <p className={styles["currency-amount"]}>{displayAmount}</p>
+            <p className={styles["currency-amount"]}>{loading ? "..." : displayAmount}</p>
 
             <p className={"light"}>{name}</p>
         </div>
