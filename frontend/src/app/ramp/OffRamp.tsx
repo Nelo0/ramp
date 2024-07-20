@@ -10,30 +10,30 @@ import Tooltip from "@/components/Tooltip";
 import PanelSelect, { PanelRoute } from "@/components/MainPanel/PanelSelect";
 
 interface OffRampProps {
+    addressSns: string,
+    addressWallet: string, // TODO - Change to Token
     setRoute: (route: PanelRoute) => void;
 }
 
-export default function OffRamp({setRoute}: OffRampProps) {
-    // TODO -> keep this constants somewhere better
-    const ADDRESS_SNS = "quartzpay.sol";
-    const ADDRESS_WALLET = "CHS52vBAVvCNAmy2jjtWWcVstwATaK37TyjwXTHzem1Q"; // TODO - Replace with Solana address type? Or check it's a valid address?
-
+export default function OffRamp({addressSns, addressWallet, setRoute}: OffRampProps) {
     const [useSNS, setUseSNS] = useState(true);
     const switchSNSText = useSNS ? "Switch to wallet address" : "Switch to SNS";
     const addressHeading = useSNS ? "Solana Name Service" : "Solana wallet address";
-    const addressCopy = useSNS ? ADDRESS_SNS : ADDRESS_WALLET;
-    const addressDisplay = useSNS ? ADDRESS_SNS : hashToDisplayString(ADDRESS_WALLET);
+    const addressCopy = useSNS ? addressSns : addressWallet;
+    const addressDisplay = useSNS ? addressSns : hashToDisplayString(addressWallet);
 
     return (
         <MainPanel>
-            <PanelSelect selected={PanelRoute.OFF} setRoute={setRoute}/>
-
             <div>
-                <h1 className={styles["heading"]}>Deposit Addresses</h1>
-                <h2 className={`light ${styles["subheading"]}`}>Convert crypto to fiat</h2>
+                <PanelSelect selected={PanelRoute.OFF} setRoute={setRoute}/>
+
+                <div className={styles["heading-wrapper"]}>
+                    <h1 className={styles["heading"]}>Deposit Addresses</h1>
+                    <h2 className={`light ${styles["subheading"]}`}>Convert USDC to fiat</h2>
+                </div>
             </div>
 
-            <QRCode address={ADDRESS_WALLET}/>
+            <QRCode address={addressWallet}/>
 
             <div>
                 <FieldHeading heading={addressHeading}>
@@ -47,9 +47,7 @@ export default function OffRamp({setRoute}: OffRampProps) {
                 </FieldHeading>
 
                 <Field copyText={addressCopy} large={true}>
-                    <div className={styles["sns-tooltip"]}>
-                        <p>{addressDisplay}</p>
-                    </div>
+                    <p>{addressDisplay}</p>
                     <Image
                         src="/copy.svg"
                         alt="Copy"

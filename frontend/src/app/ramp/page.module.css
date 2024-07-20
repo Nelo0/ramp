@@ -44,13 +44,16 @@
     height: auto;
 }
 
+.heading-wrapper {
+    margin-top: 20px;
+}
+
 .heading {
     font-size: var(--size-h3);
 }
 
 .subheading {
     font-size: var(--size-p);
-    padding-top: 5px;
 }
 
 .button-link {

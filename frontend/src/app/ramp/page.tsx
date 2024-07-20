@@ -11,8 +11,11 @@ import Account from "./Account";
 import OnRamp from "./OnRamp";
 
 export default function Ramp() {
+    const ADDRESS_SNS = "quartzpay.sol";
+    const ADDRESS_WALLET = "CHS52vBAVvCNAmy2jjtWWcVstwATaK37TyjwXTHzem1Q"; // TODO - Replace with Solana address type? Or check it's a valid address?
+    const USER_WALLET = "GgohWvPKDBDgDmkX17GrNMbmAiVy7wQVqx1yzLeG6VGf"; // TODO - Replace with Solana address type? Or check it's a valid address?
+
     const TRANSACTION_API_URL = "http://localhost:3001/api/txHistory";
-    const USER_WALLET = "GgohWvPKDBDgDmkX17GrNMbmAiVy7wQVqx1yzLeG6VGf";
     const TRANSACTION_REFRESH_SPEED = 5000;
 
     const [route, setRoute] = useState(PanelRoute.OFF);
@@ -74,11 +77,18 @@ export default function Ramp() {
             </div>
             
             {(route === PanelRoute.OFF) &&
-                <OffRamp setRoute={(route) => setRoute(route)}/>
+                <OffRamp 
+                    addressSns={ADDRESS_SNS} 
+                    addressWallet={ADDRESS_WALLET} 
+                    setRoute={(route) => setRoute(route)}
+                />
             }
             
             {(route === PanelRoute.ON) &&
-                <OnRamp setRoute={(route) => setRoute(route)}/>
+                <OnRamp 
+                    userWallet={USER_WALLET}
+                    setRoute={(route) => setRoute(route)}
+                />
             }
 
             {(route === PanelRoute.ACCOUNT) &&

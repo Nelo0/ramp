@@ -30,6 +30,7 @@
     linear-gradient(65deg, rgba(188,188,188,0.12) 0%, rgba(235,235,235,0.25) 100%);
   
   --placeholder-glass-stroke: #4E677D;
+  --placeholder-glass-stroke-accent: #5A355A;
   --glass-border: 1.5px solid var(--placeholder-glass-stroke); /* TODO: Make gradient */
 
   --background-linear-gradient: linear-gradient(var(--color-background), var(--color-background));
@@ -53,7 +54,7 @@
   --transaction-card-border-radius: 16px;
   --field-width: 425px;
   --tooltip-size: 13px;
-  --nav-height: 70px;
+  --nav-height: 65px;
 }
 
 @media only screen and (max-width: 1030px) {
@@ -65,7 +66,7 @@
     --size-s: calc(0.9 * var(--size-s-base));
     --size-p: calc(0.9 * var(--size-p-base));
 
-    --nav-height: 65px;
+    --nav-height: 60px;
   }
 }
 
@@ -78,14 +79,14 @@
     --size-s: calc(0.8 * var(--size-s-base));
     --size-p: calc(0.8 * var(--size-p-base));
 
-    --nav-height: 60px;
+    --nav-height: 55px;
     --tooltip-size: 11.5px;
   }
 }
 
 @media only screen and (max-width: 475px) {
   :root {
-    --nav-height: 55px;
+    --nav-height: 50px;
   }
 }
 
@@ -118,6 +119,10 @@ small {
 
 .light{
   color: var(--color-text-light);
+}
+
+.bold{
+  font-weight: 400;
 }
 
 button {

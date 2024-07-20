@@ -4,15 +4,16 @@ import styles from "./FieldHeading.module.css";
 
 interface FieldHeadingProps {
     heading: string;
+    bold?: boolean;
     children?: React.ReactNode;
 }
 
-export default function FieldHeading({heading, children}: FieldHeadingProps) {
+export default function FieldHeading({heading, bold, children}: FieldHeadingProps) {
     const [tooltipOpen, setTooltipOpen] = useState(false);
 
     return (
         <div className={styles["field-heading"]}>
-            <small>{heading}</small>
+            <small className={bold ? "bold" : ""}>{heading}</small>
             {children}
         </div>
     )
