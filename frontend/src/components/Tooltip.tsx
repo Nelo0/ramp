@@ -20,8 +20,8 @@ export default function Tooltip({src, alt, children}: TooltipProps) {
             <Image
                 src={src}
                 alt={alt}
-                height={0}
-                width={0}
+                height={13}
+                width={13}
             />
             {enabled &&
                 <div className={styles["tooltip-wrapper"]}>

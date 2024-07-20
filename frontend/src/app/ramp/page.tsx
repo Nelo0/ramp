@@ -63,8 +63,8 @@ export default function Ramp() {
                     <Image
                         src="/quartz_logo.svg"
                         alt="Quartz"
-                        height={0}
-                        width={0}
+                        height={74.29}
+                        width={180}
                         className={styles["quartz-logo"]}
                     />
                 </a>

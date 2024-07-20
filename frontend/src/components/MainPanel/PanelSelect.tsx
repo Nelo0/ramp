@@ -41,16 +41,16 @@ export default function PanelSelect({selected, setRoute}: PanelSelectProps) {
                     <Image
                         src="profile.svg"
                         alt="Account"
-                        height={0}
-                        width={0}
+                        height={32}
+                        width={28}
                     />
                 }
                 {account &&
                     <Image
                         src="profile_selected.svg"
                         alt="Account"
-                        height={0}
-                        width={0}
+                        height={32}
+                        width={28}
                     />
                 }
             </button>

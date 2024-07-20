@@ -1,11 +1,17 @@
 export function shortenCurrenyDisplay(amount: number, threshold: number, isFiat: boolean) {
-    const formatter = new Intl.NumberFormat("en-IE", {minimumFractionDigits: 2});
-    const amountStr = isFiat ? formatter.format(amount) : amount.toString();
+    const amountStr = isFiat ? formatFiat(amount) : amount.toString();
     
     let amountDisplay = amountStr;
     if (amountStr.length > threshold) {
         if (isFiat) {
-            amountDisplay = "~" + amountStr.split(".")[0];
+            const amountWhole = amountStr.split(".")[0];
+            if (amountWhole.length > threshold) {
+                const maxNumber = Number("9".repeat(threshold-2));
+                const formattedMaxNumber = formatFiat(maxNumber);
+                amountDisplay = ">" + formattedMaxNumber.split(".")[0];
+            } else {
+                amountDisplay = "~" + amountWhole;
+            }
         } else {
             amountDisplay = amountStr.slice(0, threshold-1);
 
@@ -15,4 +21,9 @@ export function shortenCurrenyDisplay(amount: number, threshold: number, isFiat:
     }
 
     return amountDisplay;
+}
+
+export function formatFiat(amount: number) {
+    const formatter = new Intl.NumberFormat("en-IE", {minimumFractionDigits: 2});
+    return formatter.format(amount);
 }

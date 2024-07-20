@@ -53,8 +53,8 @@ export default function OffRamp({setRoute}: OffRampProps) {
                     <Image
                         src="/copy.svg"
                         alt="Copy"
-                        height={0}
-                        width={0}
+                        height={36}
+                        width={36}
                     />
                 </Field>
             </div>

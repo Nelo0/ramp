@@ -2,3 +2,10 @@
     border-radius: 14px;
     overflow: hidden;
 }
+
+@media only screen and (max-width: 570px) {
+    .qr-container img {
+        height: 180px;
+        width: 180px;
+    }
+}

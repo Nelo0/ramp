@@ -1,6 +1,7 @@
 import Image from "next/image";
 import styles from "./CurrencyInfo.module.css";
 import { shortenCurrenyDisplay } from "@/utils/uiUtils";
+import { useState } from "react";
 
 interface CurrencyInfoProps {
     src: string;
@@ -9,7 +10,7 @@ interface CurrencyInfoProps {
 }
 
 export default function CurrencyInfo({src, name, amount}: CurrencyInfoProps) {
-    const THRESHOLD = 10;
+    const THRESHOLD = 7;
 
     const isEuro = (name == "EUR");
     const displayAmount = shortenCurrenyDisplay(amount, THRESHOLD, isEuro);

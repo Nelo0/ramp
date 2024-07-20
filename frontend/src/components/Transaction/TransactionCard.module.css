@@ -31,12 +31,6 @@
     outline: 1.5px solid var(--placeholder-glass-stroke);
 }
 
-@media only screen and (max-width: 570px) {
-    .card-base {
-        padding: 25px 10px;
-    }
-}
-
 .card-base:hover {
     --overlay-color: rgba(255, 255, 255, 0.03);
     background-image: 
@@ -70,7 +64,7 @@
     grid-template-columns: 4.5fr 1fr 4.5fr;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
-    justify-items: space-between;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -87,25 +81,12 @@
     width: 24%;
 }
 
-@media only screen and (max-width: 570px) {
-    .arrow {
-        height: 15.2px;
-        width: 21.12px;
-    }
-
-    .basic-info {
-        flex-direction: column;
-        gap: 3px;
-        width: auto;
-    }
-}
-
 .card-details {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-column-gap: 100px;
     grid-row-gap: 10px;
-    justify-items: left;
+    justify-content: left;
 
     overflow: hidden;
     transition: max-height 0.15s ease-in, padding 0.15s ease-in;
@@ -169,6 +150,61 @@
     top: 1px;
 }
 
-@keyframes pop {
-    50%  {transform: scale(1.4);}
+@media only screen and (max-width: 570px) {
+    .card-base {
+        padding: 25px 10px;
+    }
+
+    .arrow {
+        height: 15.2px;
+        width: 21.12px;
+    }
+
+    .basic-info {
+        flex-direction: column;
+        gap: 3px;
+        width: auto;
+    }
 }
+
+@media only screen and (max-width: 470px) {
+    .card-base {
+        flex-direction: column-reverse;
+        gap: 15px;
+        padding: 23px;
+    }
+
+    .arrow {
+        height: 13.68px;
+        width: 19px;
+    }
+
+    .basic-info {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .currencies {
+        justify-items: stretch;
+        width: 100%;
+        grid-template-columns: 5fr 1fr 5fr;
+    }
+
+    .currencies > :nth-child(1) {
+        justify-self: start;
+    }
+
+    .currencies > :nth-child(2) {
+        justify-self: center;
+    }
+
+    .currencies > :nth-child(3) {
+        justify-self: end;
+    }
+
+    .card-details {
+        grid-column-gap: 15px;
+    }
+}
+

@@ -6,6 +6,7 @@ import TransactionStatus from "./TransactionStatus";
 import { useEffect, useRef, useState } from "react";
 import { hashToDisplayString } from "@/utils/solanaUtils";
 import Link from "next/link";
+import { formatFiat } from "@/utils/uiUtils";
 
 interface TransactionCardProps {
     transaction: Transaction;
@@ -43,9 +44,11 @@ export default function TransactionCard({transaction, dateLabelled} : Transactio
     else if (timeObj.setHours(0,0,0,0) === yesterday.setHours(0,0,0,0)) dateLabel = "Yesterday";
 
 
-    // Format € symbol
+    // Format currency amounst
     const isInputEuro = transaction.inputCurrency == "EUR"; // TODO - Change to a "Token" class
     const isOutputEuro = transaction.outputCurrency == "EUR"; // TODO - Change to a "Token" class
+    const displayAmountInput = isInputEuro ? "€"+formatFiat(transaction.amountInputCurrency) : transaction.amountInputCurrency;
+    const displayAmountOutput = isOutputEuro ? "€"+formatFiat(transaction.amountOutputCurrency) : transaction.amountOutputCurrency;
 
     const inputTokenIcon = "/tokens/sol.jpg"; // TODO - Remove hardcoding
     const outputTokenIcon = "/euro.svg";
@@ -84,8 +87,8 @@ export default function TransactionCard({transaction, dateLabelled} : Transactio
                         <Image
                             src="/right_arrow.svg"
                             alt="converted into"
-                            height={0}
-                            width={0}
+                            height={19}
+                            width={26.5}
                             className={styles["arrow"]}
                         />
 
@@ -102,8 +105,8 @@ export default function TransactionCard({transaction, dateLabelled} : Transactio
                 <div ref={detailsRef} className={`${styles["card-details"]} ${isOpen && styles["open"]}`}>
                     <p className="light">Transaction type</p> <p>{transactionTypeText}</p>
                     <p className="light">Created on</p> <p>{formattedDateTime}</p>
-                    <p className="light">{transaction.inputCurrency} sent</p> <p>{isInputEuro && "€"}{transaction.amountInputCurrency}</p>
-                    <p className="light">{transaction.outputCurrency} received</p> <p>{isOutputEuro && "€"}{transaction.amountOutputCurrency}</p>
+                    <p className="light">{transaction.inputCurrency} sent</p> <p>{displayAmountInput}</p>
+                    <p className="light">{transaction.outputCurrency} received</p> <p>{displayAmountOutput}</p>
                     <p className="light">Solana gas fee</p> <p>~€{transaction.gasFeeEuro}</p>
                     <p className="light">Transaction fee</p> <p>€{transaction.transactionFeeEuro} <span className="light">(0.5%)</span></p>
                     <p className="light">{fiatPrefix} IBAN</p> <p>{transaction.iban}</p>
