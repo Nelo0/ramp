@@ -6,24 +6,7 @@ interface TransactionsProps {
     transactions: Transaction[]
 }
 
-export default function Transactions({transactions} : TransactionsProps) { 
-    //TOOD remove tmp below
-    transactions[0] = {
-        offRamp: true,
-        inputCurrency: "SOL",
-        outputCurrency: "EUR",
-        amountInputCurrency: 0.28193219837291,
-        amountOutputCurrency: 32189321,
-        time: "2019-09-07T15:50",
-        gasFeeEuro: 0.1,
-        transactionFeeEuro: 100,
-        iban: "foo",
-        bic: "foo",
-        transactionHash: "foo",
-        depositHash: "foo",
-        status: Status.PROCESSING
-    }
-
+export default function Transactions({transactions} : TransactionsProps) {
     let lastDate: Date | null = null;
     return (
         <div className={`glass ${styles["transactions"]}`}>

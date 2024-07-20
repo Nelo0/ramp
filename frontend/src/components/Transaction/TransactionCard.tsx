@@ -92,7 +92,12 @@ export default function TransactionCard({transaction, dateLabelled} : Transactio
                             className={styles["arrow"]}
                         />
 
-                        <CurrencyInfo src={outputTokenIcon} name={transaction.outputCurrency} amount={transaction.amountOutputCurrency} loading={transaction.status === "LOADING"}/>
+                        <CurrencyInfo 
+                            src={outputTokenIcon} 
+                            name={transaction.outputCurrency} 
+                            amount={transaction.amountOutputCurrency} 
+                            loading={transaction.status === Status.LOADING}
+                        />
                     </div>
 
                     <div className={styles["basic-info"]}>
