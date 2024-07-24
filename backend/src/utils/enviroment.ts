@@ -4,6 +4,8 @@ import * as dotenv from "dotenv"
 dotenv.config()
 
 export const SOLANA_APIKEY = process.env.HELIUS_APIKEY;
+
+export const RAMP_APIKEY = process.env.RAMP_APIKEY || "";
 const QUICKNODE_URL = process.env.QUICKNODE_URL
 export const ENV: Cluster = (process.env.cluster as Cluster) || "mainnet-beta";
 export const SOLANA_WS_ENDPOINT = ENV === "devnet"

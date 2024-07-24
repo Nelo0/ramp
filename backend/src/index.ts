@@ -1,12 +1,12 @@
 import WebSocket from "ws";
 import { getBalanceChange, getSignaturesForAddress, getTransaction } from "./utils/utils.js";
-import { TransactionInfo, getSwapIntructions as getSwapTransactionInfo } from "./offramp/swap.js";
+import { TransactionInfo, getSwapIntructions as getSwapTransactionInfo } from "./euroe/swap.js";
 import { ENV, SOLANA_RPC_ENDPOINT, SOLANA_WS_ENDPOINT, quartzKeypair } from "./utils/enviroment.js";
 import { filterProcessedSignaturesNew } from "./utils/processing.js";
 import { sendTransactionLogic } from "./utils/transactionSender.js";
-import { returnFunds } from "./offramp/returnFunds.js";
+import { returnFunds } from "./euroe/returnFunds.js";
 import { PublicKey } from "@solana/web3.js";
-import { getMockOfframpInfo } from "./offramp/mockOfframp.js";
+import { getMockOfframpInfo } from "./euroe/mockOfframp.js";
 import { addSignatures, getUsersAddressArray } from "./database/schema.js";
 import express, { Application, Request, Response } from 'express';
 import routes from "./routes/index.js";

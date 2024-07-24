@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import cors from 'cors';
-import { getKycLink, KycLinkInfo } from '../bridge/createCustomer.js';
+import { getKycLink, KycLinkInfo } from '../bridge/customer.js';
+import { getLiqAddressHistory, LiquidationHistoryInfo } from '../bridge/liquidationAddress.js';
 
 const customerRouter = Router();
 
@@ -11,7 +12,7 @@ const corsOptions = {
 };
 customerRouter.use(cors(corsOptions));
 
-customerRouter.post('/create', async (req: Request, res: Response) => {
+customerRouter.post('/createNew', async (req: Request, res: Response) => {
     try {
         const data: KycLinkInfo = req.body;
 
@@ -22,14 +23,41 @@ customerRouter.post('/create', async (req: Request, res: Response) => {
 
         if (kycLink === undefined) {
             res.json({ error: "Could not get the KYC link, please try again later"})
+            return
         }
         if (tosLink === undefined) {
             res.json({ error: "Could not get the Terms of Service link, please try again later"})
+            return
         }
 
         res.json({
-            kyc_link: result.kyc_link,
-            tos_link: result.tos_link
+            kyc_link: kycLink,
+            tos_link: tosLink
+        });
+    } catch (error) {
+        console.log("error: ", error)
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+//TODO: create a new liquidation address
+
+
+
+customerRouter.post('/getLiqAddressHistory', async (req: Request, res: Response) => {
+    try {
+        const data: LiquidationHistoryInfo = req.body;
+
+        const result: any = await getLiqAddressHistory(data)
+
+        const transactions = result.data;
+        if (!transactions) {
+            res.json({ error: "Could not get the list of previous transactions, please try again later"})
+            return
+        }
+
+        res.json({
+            previousTransactions: transactions,
         });
     } catch (error) {
         console.log("error: ", error)

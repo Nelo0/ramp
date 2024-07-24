@@ -1,4 +1,5 @@
 import bridgeDocs from '@api/bridge-docs';
+import { RAMP_APIKEY } from '../utils/enviroment.js';
 
 export interface KycLinkInfo {
     fullName: string,
@@ -10,6 +11,7 @@ export interface KycLinkInfo {
 export const getKycLink = (userInfo: KycLinkInfo) => {
     const { fullName, email, userType, endorsements } = userInfo;
 
+    bridgeDocs.default.auth(RAMP_APIKEY);
     const data = bridgeDocs.default.postKyc_links({
         full_name: fullName,
         email: email,
