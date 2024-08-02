@@ -15,7 +15,7 @@ export default function Ramp() {
     const ADDRESS_WALLET = "CHS52vBAVvCNAmy2jjtWWcVstwATaK37TyjwXTHzem1Q"; // TODO - Replace with Solana address type? Or check it's a valid address?
     
     // TODO - Remove hardcoded user info
-    const USER_WALLET = "GgohWvPKDBDgDmkX17GrNMbmAiVy7wQVqx1yzLeG6VGf"; // TODO - Replace with Solana address type? Or check it's a valid address?
+    const USER_WALLET = "6Z9VJVgURh7azhfjxHtXuJuezXPW1rruqVvQK1UyS9t"; // TODO - Replace with Solana address type? Or check it's a valid address?
     const USER_NAME = "Iarla Crewe";
     const USER_IBAN = "ES9121000418450200051332";
     const USER_BANK_HOLDER = "Iarla Crewe";

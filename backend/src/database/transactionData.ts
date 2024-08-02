@@ -59,7 +59,7 @@ export const addTransactionData = async (values: TransactionDataDb) => {
 
     console.log("Adding transaction data to database...")
     const solPriceEur = await getSolPriceInFiat("eur");
-    const user = await getUserByEmail("GgohWvPKDBDgDmkX17GrNMbmAiVy7wQVqx1yzLeG6VGf");
+    const user = await getUserByEmail("6Z9VJVgURh7azhfjxHtXuJuezXPW1rruqVvQK1UyS9t");
     const amountInputUi = formartToUi(amountInput, 9)
     const amountOutputUi = formartToUi(amountOutput, 6)
     const gasFeeEuroUi = formartToUi(gasFee * solPriceEur, 6)
