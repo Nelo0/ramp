@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import cors from 'cors';
 import { getKycLink, KycLinkInfo } from '../bridge/customer.js';
 import { createLiquidationAddress, getLiqAddressHistory, LiquidationHistoryInfo } from '../bridge/liquidationAddress.js';
+import { createExternalAccount, ExternalAccountInfo, getUsersExternalAccounts } from '../bridge/externalAccount.js';
 
 const customerRouter = Router();
 
@@ -22,11 +23,11 @@ customerRouter.post('/createNewUser', async (req: Request, res: Response) => {
         const tosLink = result.tos_link;
 
         if (kycLink === undefined) {
-            res.json({ error: "Could not get the KYC link, please try again later"})
+            res.json({ error: "Could not get the KYC link, please try again later" })
             return
         }
         if (tosLink === undefined) {
-            res.json({ error: "Could not get the Terms of Service link, please try again later"})
+            res.json({ error: "Could not get the Terms of Service link, please try again later" })
             return
         }
 
@@ -40,10 +41,48 @@ customerRouter.post('/createNewUser', async (req: Request, res: Response) => {
     }
 });
 
-//TODO: create an external account
+customerRouter.post('/createExternalAccount', async (req: Request, res: Response) => {
+    try {
+        const data: ExternalAccountInfo = req.body;
 
+        const result: any = await createExternalAccount(data)
 
-//TODO: create a new liquidation address
+        const externalAccountId = result.id;
+        if (!externalAccountId) {
+            res.json({ error: "Could not create the external account, please try again later" })
+            return
+        }
+
+        res.json({
+            externalAccountId: externalAccountId,
+        });
+    } catch (error) {
+        console.log("error: ", error)
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+customerRouter.post('/getExternalAccounts', async (req: Request, res: Response) => {
+    try {
+        const data: ExternalAccountInfo = req.body;
+
+        const result: any = await getUsersExternalAccounts(data)
+
+        const externalAccounts = result.data;
+        if (!externalAccounts) {
+            res.json({ error: "Could not get the users external accounts, please try again later" })
+            return
+        }
+
+        res.json({
+            externalAccounts: externalAccounts,
+        });
+    } catch (error) {
+        console.log("error: ", error)
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 customerRouter.post('/createNewLiqAddress', async (req: Request, res: Response) => {
     try {
         const data: LiquidationHistoryInfo = req.body;
@@ -53,7 +92,7 @@ customerRouter.post('/createNewLiqAddress', async (req: Request, res: Response) 
         //Docs are confusing, could be .address or .destination_address
         const liqAddress = result.address;
         if (!liqAddress) {
-            res.json({ error: "Could not create a liquidiation address, please try again later"})
+            res.json({ error: "Could not create a liquidiation address, please try again later" })
             return
         }
 
@@ -75,7 +114,7 @@ customerRouter.post('/getLiqAddressHistory', async (req: Request, res: Response)
 
         const transactions = result.data;
         if (!transactions) {
-            res.json({ error: "Could not get the list of previous transactions, please try again later"})
+            res.json({ error: "Could not get the list of previous transactions, please try again later" })
             return
         }
 

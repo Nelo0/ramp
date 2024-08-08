@@ -1,7 +1,7 @@
 import bridgeDocs from '@api/bridge-docs';
 import { RAMP_APIKEY } from '../utils/enviroment.js';
 
-interface ExternalAccountInfo {
+export interface ExternalAccountInfo {
     customerId: string;
     currency?: "usd" | "eur";
     bankName?: string;
@@ -16,7 +16,7 @@ interface ExternalAccountInfo {
     businessName?: string;
 }
 
-export interface USAccountDetails {
+interface USAccountDetails {
     [x: string]: unknown,
     account_number: string, //The bank account number
     routing_number: string, //The bank routing number
@@ -24,7 +24,7 @@ export interface USAccountDetails {
     last_4: string,
 }
 
-export interface IbanAccountDetails {
+interface IbanAccountDetails {
     [x: string]: unknown,
     account_number: string, //The International Bank Account Number (IBAN) that will be used to send the funds
     bic: string, //The Bank Identifier Code (BIC) that will be used to send the funds
