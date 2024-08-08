@@ -9,6 +9,7 @@ export interface LiquidationHistoryInfo {
     wireMessage?: string,
     sepaMessage?: string,
     swiftMessage?: string,
+    liquidationAddressId?: string,
 }
 
 export const createLiquidationAddress = (userInfo: LiquidationHistoryInfo) => {
@@ -38,13 +39,10 @@ export const createLiquidationAddress = (userInfo: LiquidationHistoryInfo) => {
     return data
 }
 
-export interface LiquidationHistoryInfo {
-    customerId: string,
-    liquidationAddressId: string,
-}
-
 export const getLiqAddressHistory = (userInfo: LiquidationHistoryInfo) => {
     const { customerId, liquidationAddressId } = userInfo;
+
+    if (!liquidationAddressId) throw Error("Get liq address history call requires a valid liquidiationAddressId")
 
     bridgeDocs.default.auth(RAMP_APIKEY);
     const data = bridgeDocs.default.getCustomersCustomeridLiquidation_addressesLiquidationaddressidDrains({ customerID: customerId, liquidationAddressID: liquidationAddressId })
