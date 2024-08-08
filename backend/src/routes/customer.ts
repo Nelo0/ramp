@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import cors from 'cors';
 import { getKycLink, KycLinkInfo } from '../bridge/customer.js';
-import { getLiqAddressHistory, LiquidationHistoryInfo } from '../bridge/liquidationAddress.js';
+import { createLiquidationAddress, getLiqAddressHistory, LiquidationHistoryInfo } from '../bridge/liquidationAddress.js';
 
 const customerRouter = Router();
 
@@ -12,7 +12,7 @@ const corsOptions = {
 };
 customerRouter.use(cors(corsOptions));
 
-customerRouter.post('/createNew', async (req: Request, res: Response) => {
+customerRouter.post('/createNewUser', async (req: Request, res: Response) => {
     try {
         const data: KycLinkInfo = req.body;
 
@@ -40,8 +40,31 @@ customerRouter.post('/createNew', async (req: Request, res: Response) => {
     }
 });
 
-//TODO: create a new liquidation address
+//TODO: create an external account
 
+
+//TODO: create a new liquidation address
+customerRouter.post('/createNewLiqAddress', async (req: Request, res: Response) => {
+    try {
+        const data: LiquidationHistoryInfo = req.body;
+
+        const result: any = await createLiquidationAddress(data)
+
+        //Docs are confusing, could be .address or .destination_address
+        const liqAddress = result.address;
+        if (!liqAddress) {
+            res.json({ error: "Could not create a liquidiation address, please try again later"})
+            return
+        }
+
+        res.json({
+            liquidationAddress: liqAddress,
+        });
+    } catch (error) {
+        console.log("error: ", error)
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 
 
 customerRouter.post('/getLiqAddressHistory', async (req: Request, res: Response) => {
